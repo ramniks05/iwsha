@@ -1,0 +1,531 @@
+/* ── Education Welfare Program Services ── */
+.ewp-services {
+  --ewp-blue: #2563eb;
+  --ewp-cyan: #0891b2;
+  --ewp-glass: rgba(255, 255, 255, 0.72);
+  --ewp-glass-border: rgba(255, 255, 255, 0.85);
+  position: relative;
+  width: calc(100% + 2.5rem);
+  max-width: none;
+  margin: 0 -1.25rem;
+  padding: 0;
+  overflow: visible;
+  color: #1e293b;
+  font-family: 'Inter', 'Poppins', 'Segoe UI', sans-serif;
+}
+
+.ewp-wave {
+  position: relative;
+  z-index: 2;
+  line-height: 0;
+  color: #f0f9ff;
+}
+
+.ewp-wave--top {
+  margin-bottom: -1px;
+}
+
+.ewp-wave--bottom {
+  margin-top: -1px;
+  color: var(--bg);
+}
+
+.ewp-wave svg {
+  display: block;
+  width: 100%;
+  height: 40px;
+}
+
+.ewp-services-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ewp-services-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    #f0f9ff 0%,
+    #ffffff 30%,
+    #ecfeff 55%,
+    #eff6ff 80%,
+    #f8fafc 100%
+  );
+}
+
+.ewp-services-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.45;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 80% 70%, rgba(8, 145, 178, 0.07) 0%, transparent 40%),
+    linear-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.03) 1px, transparent 1px);
+  background-size: auto, auto, 40px 40px, 40px 40px;
+}
+
+.ewp-float-shape {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+  animation: ewp-float 10s ease-in-out infinite;
+}
+
+.ewp-float-shape--1 {
+  width: 300px;
+  height: 300px;
+  background: rgba(37, 99, 235, 0.15);
+  top: 8%;
+  right: -5%;
+}
+
+.ewp-float-shape--2 {
+  width: 220px;
+  height: 220px;
+  background: rgba(8, 145, 178, 0.12);
+  bottom: 20%;
+  left: -4%;
+  animation-delay: -4s;
+}
+
+.ewp-float-shape--3 {
+  width: 160px;
+  height: 160px;
+  background: rgba(37, 99, 235, 0.1);
+  top: 55%;
+  left: 40%;
+  animation-delay: -7s;
+}
+
+@keyframes ewp-float {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(14px, -18px);
+  }
+}
+
+.ewp-services-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 0.5rem;
+}
+
+/* Header */
+.ewp-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 2.5rem;
+}
+
+.ewp-label {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ewp-blue);
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.15);
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  margin-bottom: 0.75rem;
+}
+
+.ewp-header h2 {
+  margin: 0 0 0.85rem;
+  font-size: clamp(1.65rem, 4vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: #0f172a;
+}
+
+.ewp-header p {
+  margin: 0;
+  font-size: clamp(0.92rem, 1.5vw, 1.02rem);
+  line-height: 1.75;
+  color: #475569;
+}
+
+/* Impact counters */
+.ewp-impact {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.ewp-stat {
+  text-align: center;
+  padding: 1.15rem 0.75rem;
+  background: var(--ewp-glass);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--ewp-glass-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.08);
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.ewp-impact--active .ewp-stat {
+  animation: ewp-fade-up 0.65s cubic-bezier(0.22, 1, 0.36, 1) var(--ewp-delay) forwards;
+}
+
+.ewp-stat strong {
+  display: block;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  color: var(--ewp-blue);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 0.2rem;
+}
+
+.ewp-stat span {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Timeline */
+.ewp-timeline {
+  position: relative;
+  margin-bottom: 2.75rem;
+  padding: 0 0.5rem;
+}
+
+.ewp-timeline-track {
+  position: absolute;
+  top: 18px;
+  left: 1.5rem;
+  right: 1.5rem;
+  height: 3px;
+  background: rgba(37, 99, 235, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.ewp-timeline-progress {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--ewp-blue), var(--ewp-cyan));
+  border-radius: 999px;
+  transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+}
+
+.ewp-timeline--active .ewp-timeline-progress {
+  width: 100%;
+}
+
+.ewp-timeline-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.ewp-timeline-step {
+  position: relative;
+  padding-top: 2.5rem;
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.ewp-timeline--active .ewp-timeline-step {
+  animation: ewp-fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) var(--ewp-step-delay) forwards;
+}
+
+.ewp-timeline-dot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--ewp-blue);
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--ewp-blue);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.2);
+  z-index: 1;
+}
+
+.ewp-timeline-step strong {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.3rem;
+  text-align: center;
+}
+
+.ewp-timeline-step p {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: #64748b;
+  text-align: center;
+}
+
+/* Service cards grid */
+.ewp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 0;
+}
+
+.ewp-card {
+  --ewp-accent: var(--ewp-blue);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background: var(--ewp-glass);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid var(--ewp-glass-border);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s ease,
+    border-color 0.35s ease;
+}
+
+.ewp-card--visible {
+  animation: ewp-fade-up 0.65s cubic-bezier(0.22, 1, 0.36, 1) var(--ewp-delay) forwards;
+}
+
+@keyframes ewp-fade-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ewp-card-glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 50%) var(--mouse-y, 0%),
+    color-mix(in srgb, var(--ewp-accent) 18%, transparent),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.ewp-card:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--ewp-accent) 30%, white);
+  box-shadow:
+    0 20px 48px rgba(37, 99, 235, 0.12),
+    0 0 0 1px color-mix(in srgb, var(--ewp-accent) 12%, transparent);
+}
+
+.ewp-card:hover .ewp-card-glow {
+  opacity: 1;
+}
+
+.ewp-card-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 60%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.65s ease;
+  pointer-events: none;
+}
+
+.ewp-card:hover .ewp-card-shine {
+  transform: translateX(120%);
+}
+
+.ewp-card-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--ewp-accent) 14%, white),
+    color-mix(in srgb, var(--ewp-accent) 6%, white)
+  );
+  border: 1px solid color-mix(in srgb, var(--ewp-accent) 20%, #e2e8f0);
+  color: var(--ewp-accent);
+  margin-bottom: 1rem;
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--ewp-accent) 16%, transparent);
+  transition: transform 0.35s ease;
+}
+
+.ewp-card-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.ewp-card:hover .ewp-card-icon {
+  transform: scale(1.08) translateY(-2px);
+}
+
+.ewp-card h3 {
+  margin: 0 0 0.55rem;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.ewp-card p {
+  margin: 0 0 1.15rem;
+  flex: 1;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: #64748b;
+}
+
+.ewp-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ewp-accent);
+  text-decoration: none;
+  margin-top: auto;
+  transition: gap 0.25s ease, color 0.25s ease;
+}
+
+.ewp-card-cta span {
+  transition: transform 0.25s ease;
+}
+
+.ewp-card-cta:hover {
+  gap: 0.55rem;
+  color: color-mix(in srgb, var(--ewp-accent) 85%, #0f172a);
+}
+
+.ewp-card-cta:hover span {
+  transform: translateX(3px);
+}
+
+.ewp-card-cta:focus-visible {
+  outline: 2px solid var(--ewp-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .ewp-impact {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ewp-timeline-steps {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem 1rem;
+  }
+
+  .ewp-timeline-track {
+    display: none;
+  }
+
+  .ewp-timeline-step {
+    padding-top: 0;
+    padding-left: 3rem;
+    text-align: left;
+  }
+
+  .ewp-timeline-dot {
+    left: 0;
+    transform: none;
+  }
+
+  .ewp-timeline-step strong,
+  .ewp-timeline-step p {
+    text-align: left;
+  }
+}
+
+@media (max-width: 640px) {
+  .ewp-services {
+    margin: 0 -1.25rem;
+  }
+
+  .ewp-services-inner {
+    padding: 2rem 1rem 2.5rem;
+  }
+
+  .ewp-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ewp-timeline-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .ewp-impact {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .ewp-stat {
+    padding: 0.85rem 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ewp-card,
+  .ewp-card--visible,
+  .ewp-stat,
+  .ewp-timeline-step {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .ewp-timeline--active .ewp-timeline-progress {
+    width: 100%;
+    transition: none;
+  }
+
+  .ewp-float-shape,
+  .ewp-card-shine {
+    animation: none;
+    display: none;
+  }
+
+  .ewp-card:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,489 @@
+/* ── Modern form pages ── */
+.form-page-body {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.form-page-body--wide {
+  max-width: 1080px;
+}
+
+.modern-form-shell {
+  background: var(--card, #fff);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: calc(var(--radius, 14px) + 4px);
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  box-shadow: var(--shadow, 0 4px 24px rgba(5, 44, 101, 0.08));
+}
+
+.modern-form-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border, #e2e8f0);
+}
+
+.modern-form-header-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  color: var(--blue, #0d6efd);
+  background: rgba(13, 110, 253, 0.1);
+  border: 1px solid rgba(13, 110, 253, 0.15);
+}
+
+.modern-form-header-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.modern-form-header-icon--donate {
+  color: var(--orange, #f58220);
+  background: rgba(245, 130, 32, 0.1);
+  border-color: rgba(245, 130, 32, 0.18);
+}
+
+.modern-form-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.35rem, 3vw, 1.65rem);
+  color: var(--navy, #052c65);
+  letter-spacing: -0.02em;
+}
+
+.modern-form-header p {
+  margin: 0;
+  color: var(--muted, #64748b);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  max-width: 52ch;
+}
+
+.modern-form-section {
+  margin-bottom: 1.5rem;
+}
+
+.modern-form-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted, #64748b);
+}
+
+.modern-form-section-title svg {
+  width: 16px;
+  height: 16px;
+  color: var(--blue, #0d6efd);
+}
+
+.modern-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.modern-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.modern-field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.modern-field-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.modern-field-required {
+  color: #ef4444;
+  margin-left: 0.15rem;
+}
+
+.modern-field-control {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+.modern-field-icon {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.modern-field-control:has(textarea) .modern-field-icon {
+  top: 0.95rem;
+  transform: none;
+}
+
+.modern-field-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.modern-field-control input,
+.modern-field-control textarea,
+.modern-field-control select {
+  width: 100%;
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.78rem 0.9rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: var(--text, #1e293b);
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.modern-field-control--icon input,
+.modern-field-control--icon select,
+.modern-field-control--icon textarea {
+  padding-left: 2.85rem;
+}
+
+.modern-field-control--icon textarea {
+  padding-top: 0.78rem;
+}
+
+.modern-field-control textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.modern-field-control select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  padding-right: 2.25rem;
+}
+
+.modern-field-control input:focus,
+.modern-field-control textarea:focus,
+.modern-field-control select:focus {
+  outline: none;
+  border-color: var(--blue, #0d6efd);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.12);
+}
+
+.modern-field-control:focus-within .modern-field-icon {
+  color: var(--blue, #0d6efd);
+}
+
+.modern-amount-chips {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.modern-amount-chips button {
+  border: 1.5px solid #e2e8f0;
+  background: #fff;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #64748b;
+  transition: all 0.2s;
+}
+
+.modern-amount-chips button:hover {
+  border-color: rgba(245, 130, 32, 0.35);
+  color: var(--orange, #f58220);
+}
+
+.modern-amount-chips button.active {
+  border-color: var(--orange, #f58220);
+  background: #fff8f2;
+  color: #e06a10;
+}
+
+.modern-form-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.85rem 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 0.84rem;
+  color: #64748b;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.modern-form-check input {
+  margin-top: 0.15rem;
+  accent-color: var(--blue, #0d6efd);
+  flex-shrink: 0;
+}
+
+.modern-form-check-icon {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  color: var(--green, #00a651);
+  flex-shrink: 0;
+}
+
+.modern-form-check-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.modern-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.modern-form-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 12px;
+  padding: 0.85rem 1.35rem;
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.modern-form-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.modern-form-btn--primary {
+  background: linear-gradient(135deg, var(--navy, #052c65), #0a3d7a);
+  box-shadow: 0 4px 18px rgba(5, 44, 101, 0.25);
+}
+
+.modern-form-btn--blue {
+  background: linear-gradient(135deg, var(--blue, #0d6efd), #0956c7);
+  box-shadow: 0 4px 18px rgba(13, 110, 253, 0.28);
+}
+
+.modern-form-btn--orange {
+  background: linear-gradient(135deg, var(--orange, #f58220), #e06a10);
+  box-shadow: 0 4px 18px rgba(245, 130, 32, 0.28);
+}
+
+.modern-form-btn:hover {
+  transform: translateY(-1px);
+}
+
+.modern-form-success {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0.85rem 1rem;
+  background: #ecfdf5;
+  color: #065f46;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  border: 1px solid #a7f3d0;
+  line-height: 1.5;
+}
+
+.modern-form-success-icon {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  color: var(--green, #00a651);
+  flex-shrink: 0;
+}
+
+.modern-form-success-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.modern-form-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 300px);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.modern-pay-card {
+  background: linear-gradient(160deg, #052c65, #0a3d7a);
+  border-radius: 16px;
+  padding: 1.35rem;
+  text-align: center;
+  color: #fff;
+  position: sticky;
+  top: 6rem;
+}
+
+.modern-pay-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.modern-pay-card-header svg {
+  width: 20px;
+  height: 20px;
+  opacity: 0.9;
+}
+
+.modern-pay-card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.modern-pay-qr {
+  background: #fff;
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: inline-block;
+  margin-bottom: 0.85rem;
+}
+
+.modern-pay-amount {
+  margin: 0 0 0.5rem;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffc107;
+}
+
+.modern-pay-upi {
+  margin: 0 0 0.45rem;
+  font-size: 0.85rem;
+  opacity: 0.92;
+}
+
+.modern-pay-note {
+  margin: 0;
+  font-size: 0.72rem;
+  opacity: 0.68;
+  line-height: 1.55;
+}
+
+/* Scholarships hub */
+.scholarships-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  max-width: 900px;
+  margin: 0 auto 2rem;
+}
+
+.scholarships-hub-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.75rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + 2px);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.scholarships-hub-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(5, 44, 101, 0.12);
+  border-color: rgba(13, 110, 253, 0.2);
+}
+
+.scholarships-hub-card--donate:hover {
+  border-color: rgba(245, 130, 32, 0.25);
+}
+
+.scholarships-hub-card-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  color: var(--blue);
+  background: rgba(13, 110, 253, 0.1);
+  border: 1px solid rgba(13, 110, 253, 0.14);
+}
+
+.scholarships-hub-card-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.scholarships-hub-card--donate .scholarships-hub-card-icon {
+  color: var(--orange);
+  background: rgba(245, 130, 32, 0.1);
+  border-color: rgba(245, 130, 32, 0.16);
+}
+
+.scholarships-hub-card h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--navy);
+}
+
+.scholarships-hub-card p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.scholarships-hub-card-link {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.scholarships-hub-card--donate .scholarships-hub-card-link {
+  color: var(--orange);
+}
+
+@media (max-width: 768px) {
+  .modern-form-layout,
+  .modern-form-row,
+  .scholarships-hub-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modern-pay-card {
+    position: static;
+  }
+}
