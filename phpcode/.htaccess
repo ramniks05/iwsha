@@ -1,0 +1,30 @@
+Options -Indexes
+DirectoryIndex index.php
+
+# ── Protect data directory ────────────────────────────────────────
+<FilesMatch "\.(json)$">
+  Order Allow,Deny
+  Deny from all
+</FilesMatch>
+
+# ── Protect includes directory ────────────────────────────────────
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Block direct access to includes/
+  RewriteRule ^includes/ - [F,L]
+
+  # Block direct access to data/
+  RewriteRule ^data/ - [F,L]
+
+  # Block direct access to process/ (only accessible via POST from forms)
+  RewriteCond %{REQUEST_METHOD} !POST
+  RewriteRule ^process/ - [F,L]
+</IfModule>
+
+# ── Security headers ─────────────────────────────────────────────
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

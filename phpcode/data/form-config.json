@@ -1,0 +1,11 @@
+[
+  {"id":"studentName","label":"Student Name","type":"text","icon":"user","placeholder":"Full name","required":true,"section":"personal","halfWidth":true,"enabled":true,"isDefault":true,"order":0},
+  {"id":"age","label":"Age","type":"number","icon":"age","placeholder":"17","required":true,"section":"personal","halfWidth":true,"enabled":true,"isDefault":true,"order":1},
+  {"id":"guardian","label":"Guardian Name","type":"text","icon":"users","placeholder":"Parent \/ guardian","required":true,"section":"personal","halfWidth":true,"enabled":true,"isDefault":true,"order":2},
+  {"id":"phone","label":"Phone","type":"tel","icon":"phone","placeholder":"+91 98765 43210","required":true,"section":"personal","halfWidth":true,"enabled":true,"isDefault":true,"order":3},
+  {"id":"email","label":"Email","type":"email","icon":"mail","placeholder":"you@email.com","required":true,"section":"personal","halfWidth":false,"enabled":true,"isDefault":true,"order":4},
+  {"id":"education","label":"Education Level","type":"select","icon":"education","placeholder":"Select level","required":true,"options":["10th Standard","12th Standard","Graduate","Post Graduate"],"section":"education","halfWidth":true,"enabled":true,"isDefault":true,"order":5},
+  {"id":"destination","label":"Preferred Destination","type":"select","icon":"globe","placeholder":"Select country","required":true,"options":["Switzerland","Italy","Canada","California","Belgium","Indian University"],"section":"education","halfWidth":true,"enabled":true,"isDefault":true,"order":6},
+  {"id":"income","label":"Family Annual Income (INR)","type":"number","icon":"rupee","placeholder":"250000","required":true,"section":"education","halfWidth":false,"enabled":true,"isDefault":true,"order":7},
+  {"id":"reason","label":"Why do you need support?","type":"textarea","icon":"message","placeholder":"Briefly describe your education goals...","required":true,"section":"support","halfWidth":false,"enabled":true,"isDefault":true,"order":8}
+]

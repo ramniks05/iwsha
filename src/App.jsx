@@ -6,10 +6,17 @@ import ScholarshipsPage from './pages/ScholarshipsPage'
 import ScholarshipApplyPage from './pages/ScholarshipApplyPage'
 import DonationPage from './pages/DonationPage'
 import ContactPage from './pages/ContactPage'
+import UniversityDetailPage from './pages/UniversityDetailPage'
+import AdminLoginPage from './pages/AdminLoginPage'
+import AdminDashboardPage from './pages/AdminDashboardPage'
+import AdminUniversitiesPage from './pages/AdminUniversitiesPage'
+import AdminFormPage from './pages/AdminFormPage'
+import RequireAdmin from './components/RequireAdmin'
 import SocialLinks from './components/SocialLinks'
 import FooterDonateQr from './components/FooterDonateQr'
 import WhatsAppButton from './components/WhatsAppButton'
 import iwshaLogo from './assets/iwsha-logo.png'
+import { AdminAuthProvider } from './context/AdminAuthContext'
 import { contactInfo, getWhatsAppLink, organization } from './data/siteConfig'
 import './styles/site.css'
 
@@ -24,6 +31,32 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const closeMenu = () => setMenuOpen(false)
 
+  return (
+    <AdminAuthProvider>
+      <Routes>
+        {/* ── Admin routes (login + protected panel) ── */}
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route
+          path="/admin/dashboard"
+          element={<RequireAdmin><AdminDashboardPage /></RequireAdmin>}
+        />
+        <Route
+          path="/admin/universities"
+          element={<RequireAdmin><AdminUniversitiesPage /></RequireAdmin>}
+        />
+        <Route
+          path="/admin/form-builder"
+          element={<RequireAdmin><AdminFormPage /></RequireAdmin>}
+        />
+
+        {/* ── Public routes (with site header + footer) ── */}
+        <Route path="*" element={<PublicLayout menuOpen={menuOpen} setMenuOpen={setMenuOpen} closeMenu={closeMenu} />} />
+      </Routes>
+    </AdminAuthProvider>
+  )
+}
+
+function PublicLayout({ menuOpen, setMenuOpen, closeMenu }) {
   return (
     <div className="app">
       {/* Top bar */}
@@ -91,6 +124,7 @@ function App() {
           <Route path="/scholarships/apply" element={<ScholarshipApplyPage />} />
           <Route path="/scholarships/donate" element={<DonationPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/universities/:slug" element={<UniversityDetailPage />} />
         </Routes>
       </main>
 

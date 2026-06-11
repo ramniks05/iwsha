@@ -2,8 +2,25 @@
 @import './services.css';
 @import './about.css';
 @import './wave-divider.css';
+@import './universities.css';
+@import './form-builder.css';
+@import './admin-layout.css';
 
-/* ── Variables ── */
+/* ── Variables (root-level so admin pages outside .app can also access) ── */
+:root {
+  --navy: #052c65;
+  --blue: #0d6efd;
+  --orange: #f58220;
+  --green: #00a651;
+  --bg: #f4f6f9;
+  --card: #ffffff;
+  --text: #1e293b;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --radius: 14px;
+  --shadow: 0 4px 24px rgba(5, 44, 101, 0.08);
+}
+
 .app {
   --navy: #052c65;
   --blue: #0d6efd;

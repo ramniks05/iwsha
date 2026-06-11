@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
 import { images } from '../data/images'
 import { organization } from '../data/siteConfig'
-import { overseasDestinations, testimonials, universityPartners } from '../data/siteData'
+import { overseasDestinations, testimonials } from '../data/siteData'
+import { getUniversities } from '../data/universities'
+
+const universities = getUniversities()
 
 function ProgramsPage() {
   return (
@@ -38,17 +41,25 @@ function ProgramsPage() {
         <div className="section-head">
           <span className="section-label">Partners</span>
           <h2>University Details</h2>
+          <p style={{ marginTop: '0.35rem', fontSize: '0.88rem', color: 'var(--muted)' }}>
+            Click any card to view full details, programs, and how to apply.
+          </p>
         </div>
         <div className="uni-grid">
-          {universityPartners.map((item) => (
-            <article className="uni-card" key={item.name}>
+          {universities.map((item) => (
+            <Link
+              to={`/universities/${item.slug}`}
+              className="uni-card uni-card--link"
+              key={item.id || item.name}
+            >
               <img src={item.image} alt={item.name} />
               <div className="uni-card-body">
                 <span className="uni-location">{item.location}</span>
                 <h3>{item.name}</h3>
-                <p>{item.details}</p>
+                <p>{item.tagline || item.details}</p>
+                <span className="uni-card-cta">View Details →</span>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </section>
