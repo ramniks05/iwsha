@@ -6,6 +6,7 @@ import ScholarshipsPage from './pages/ScholarshipsPage'
 import ScholarshipApplyPage from './pages/ScholarshipApplyPage'
 import DonationPage from './pages/DonationPage'
 import ContactPage from './pages/ContactPage'
+import FaqPage from './pages/FaqPage'
 import UniversityDetailPage from './pages/UniversityDetailPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import AdminDashboardPage from './pages/AdminDashboardPage'
@@ -24,6 +25,7 @@ const navItems = [
   { to: '/', label: 'Home', end: true },
   { to: '/programs', label: 'Programs' },
   { to: '/scholarships', label: 'Scholarships' },
+  { to: '/faq', label: 'FAQ' },
   { to: '/contact', label: 'Contact' },
 ]
 
@@ -123,6 +125,7 @@ function PublicLayout({ menuOpen, setMenuOpen, closeMenu }) {
           <Route path="/scholarships" element={<ScholarshipsPage />} />
           <Route path="/scholarships/apply" element={<ScholarshipApplyPage />} />
           <Route path="/scholarships/donate" element={<DonationPage />} />
+          <Route path="/faq" element={<FaqPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/universities/:slug" element={<UniversityDetailPage />} />
         </Routes>
@@ -149,6 +152,7 @@ function PublicLayout({ menuOpen, setMenuOpen, closeMenu }) {
             <NavLink to="/">Home</NavLink>
             <NavLink to="/programs">Programs</NavLink>
             <NavLink to="/scholarships">Scholarships</NavLink>
+            <NavLink to="/faq">FAQ</NavLink>
             <NavLink to="/scholarships/donate">Donate</NavLink>
             <NavLink to="/contact">Contact Us</NavLink>
           </div>

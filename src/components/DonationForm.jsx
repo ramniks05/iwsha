@@ -2,20 +2,75 @@ import { useMemo, useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import FormField from './FormField'
 import FormIcon from './FormIcon'
+import PhoneField from './PhoneField'
+import { DEFAULT_PHONE_COUNTRY } from '../data/countryPhoneOptions'
 import { buildUpiLink, paymentDetails } from '../data/paymentConfig'
+import { validateDonationForm } from '../utils/formValidation'
 import '../styles/forms.css'
 
 const quickAmounts = [500, 1000, 5000]
 
 function DonationForm() {
   const [donationSuccess, setDonationSuccess] = useState(false)
+  const [errors, setErrors] = useState({})
   const [amount, setAmount] = useState('1000')
+  const [phoneCountry, setPhoneCountry] = useState(DEFAULT_PHONE_COUNTRY)
+  const [phoneNational, setPhoneNational] = useState('')
+  const [formValues, setFormValues] = useState({ name: '', email: '', message: '' })
   const upiLink = useMemo(() => buildUpiLink(amount), [amount])
+
+  const clearError = (field) => {
+    setErrors((prev) => {
+      if (!prev[field]) return prev
+      const next = { ...prev }
+      delete next[field]
+      return next
+    })
+  }
+
+  const validateField = (field, values = formValues) => {
+    const nextErrors = validateDonationForm({
+      name: values.name,
+      email: values.email,
+      phoneCountry,
+      phoneNational,
+      amount,
+      message: values.message,
+    })
+
+    setErrors((prev) => {
+      const next = { ...prev }
+      if (nextErrors[field]) next[field] = nextErrors[field]
+      else delete next[field]
+      return next
+    })
+  }
 
   const handleDonationSubmit = (event) => {
     event.preventDefault()
+    const nextErrors = validateDonationForm({
+      name: formValues.name,
+      email: formValues.email,
+      phoneCountry,
+      phoneNational,
+      amount,
+      message: formValues.message,
+    })
+
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors)
+      setDonationSuccess(false)
+      const firstErrorId = Object.keys(nextErrors)[0]
+      document.getElementById(firstErrorId)?.focus?.()
+      return
+    }
+
+    setErrors({})
     setDonationSuccess(true)
     event.currentTarget.reset()
+    setFormValues({ name: '', email: '', message: '' })
+    setPhoneCountry(DEFAULT_PHONE_COUNTRY)
+    setPhoneNational('')
     setAmount('1000')
   }
 
@@ -35,15 +90,63 @@ function DonationForm() {
       </header>
 
       <div className="modern-form-layout">
-        <form onSubmit={handleDonationSubmit} className="modern-form">
+        <form onSubmit={handleDonationSubmit} className="modern-form" noValidate>
           <div className="modern-form-section">
             <h3 className="modern-form-section-title">
               <FormIcon name="user" />
               Donor Details
             </h3>
-            <FormField label="Full Name" name="name" icon="user" placeholder="Your name" required />
-            <FormField label="Email" name="email" icon="mail" type="email" placeholder="you@email.com" required />
-            <FormField label="Phone" name="phone" icon="phone" type="tel" placeholder="+91 98765 43210" required />
+            <FormField
+              label="Full Name"
+              name="name"
+              icon="user"
+              placeholder="Your name"
+              required
+              value={formValues.name}
+              autoComplete="name"
+              error={errors.name}
+              onChange={(event) => {
+                const name = event.target.value
+                setFormValues((prev) => ({ ...prev, name }))
+                clearError('name')
+              }}
+              onBlur={() => validateField('name')}
+            />
+            <FormField
+              label="Email"
+              name="email"
+              icon="mail"
+              type="email"
+              placeholder="you@email.com"
+              required
+              value={formValues.email}
+              autoComplete="email"
+              error={errors.email}
+              onChange={(event) => {
+                const email = event.target.value
+                setFormValues((prev) => ({ ...prev, email }))
+                clearError('email')
+              }}
+              onBlur={() => validateField('email')}
+            />
+            <PhoneField
+              id="phone"
+              name="phone"
+              label="Phone"
+              required
+              country={phoneCountry}
+              national={phoneNational}
+              error={errors.phone}
+              onCountryChange={(country) => {
+                setPhoneCountry(country)
+                clearError('phone')
+              }}
+              onNationalChange={(national) => {
+                setPhoneNational(national)
+                clearError('phone')
+              }}
+              onBlur={() => validateField('phone')}
+            />
           </div>
 
           <div className="modern-form-section">
@@ -58,8 +161,15 @@ function DonationForm() {
               type="number"
               placeholder="1000"
               required
+              min={1}
+              inputMode="numeric"
               value={amount}
-              onChange={(event) => setAmount(event.target.value)}
+              error={errors.amount}
+              onChange={(event) => {
+                setAmount(event.target.value)
+                clearError('amount')
+              }}
+              onBlur={() => validateField('amount')}
             />
 
             <div className="modern-amount-chips">
@@ -68,7 +178,10 @@ function DonationForm() {
                   key={value}
                   type="button"
                   className={Number(amount) === value ? 'active' : ''}
-                  onClick={() => setAmount(String(value))}
+                  onClick={() => {
+                    setAmount(String(value))
+                    clearError('amount')
+                  }}
                 >
                   ₹{value.toLocaleString('en-IN')}
                 </button>
@@ -76,8 +189,27 @@ function DonationForm() {
             </div>
           </div>
 
-          <FormField label="Message (optional)" name="message" icon="message">
-            <textarea id="message" name="message" rows="3" placeholder="Your message of support" />
+          <FormField
+            label="Message (optional)"
+            name="message"
+            icon="message"
+            error={errors.message}
+          >
+            <textarea
+              id="message"
+              name="message"
+              rows="3"
+              placeholder="Your message of support"
+              value={formValues.message}
+              aria-invalid={errors.message ? 'true' : 'false'}
+              aria-describedby={errors.message ? 'message-error' : undefined}
+              onChange={(event) => {
+                const message = event.target.value
+                setFormValues((prev) => ({ ...prev, message }))
+                clearError('message')
+              }}
+              onBlur={() => validateField('message')}
+            />
           </FormField>
 
           <div className="modern-form-actions">

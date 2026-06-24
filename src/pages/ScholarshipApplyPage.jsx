@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import ScholarshipForm from '../components/ScholarshipForm'
 import { images } from '../data/images'
 import { organization } from '../data/siteConfig'
@@ -15,6 +16,10 @@ function ScholarshipApplyPage() {
       </section>
 
       <div className="form-page-body">
+        <p className="form-page-faq-link">
+          Have questions before applying?{' '}
+          <Link to="/faq">Read our sponsorship FAQ</Link>
+        </p>
         <ScholarshipForm />
       </div>
     </div>

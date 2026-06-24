@@ -1,31 +1,83 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import FormIcon from './FormIcon'
+import PhoneField from './PhoneField'
+import { DEFAULT_PHONE_COUNTRY } from '../data/countryPhoneOptions'
 import { SECTION_OPTIONS, getFormConfig } from '../data/formConfig'
+import { validateDynamicField, validateScholarshipForm } from '../utils/formValidation'
 import '../styles/forms.css'
 
-function DynamicField({ field }) {
+function DynamicField({ field, error, phoneState, onPhoneChange, onBlur }) {
   const { id, label, type, icon, placeholder, required, options } = field
+  const controlClass = [
+    'modern-field-control',
+    icon ? 'modern-field-control--icon' : '',
+    error ? 'modern-field-control--invalid' : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
+  if (type === 'tel') {
+    return (
+      <PhoneField
+        id={id}
+        name={id}
+        label={label}
+        required={required}
+        country={phoneState?.country ?? DEFAULT_PHONE_COUNTRY}
+        national={phoneState?.national ?? ''}
+        error={error}
+        onCountryChange={(country) => onPhoneChange(id, { country })}
+        onNationalChange={(national) => onPhoneChange(id, { national })}
+        onBlur={() => onBlur(id)}
+      />
+    )
+  }
 
   const inputEl = type === 'select' ? (
-    <select id={id} name={id} required={required} defaultValue="">
+    <select
+      id={id}
+      name={id}
+      defaultValue=""
+      aria-invalid={error ? 'true' : 'false'}
+      aria-describedby={error ? `${id}-error` : undefined}
+      onBlur={() => onBlur(id)}
+    >
       <option value="" disabled>{placeholder || `Select ${label}`}</option>
       {(options || []).map((opt) => (
         <option key={opt} value={opt}>{opt}</option>
       ))}
     </select>
   ) : type === 'textarea' ? (
-    <textarea id={id} name={id} rows={4} required={required} placeholder={placeholder} />
+    <textarea
+      id={id}
+      name={id}
+      rows={4}
+      placeholder={placeholder}
+      aria-invalid={error ? 'true' : 'false'}
+      aria-describedby={error ? `${id}-error` : undefined}
+      onBlur={() => onBlur(id)}
+    />
   ) : (
-    <input id={id} name={id} type={type} required={required} placeholder={placeholder} />
+    <input
+      id={id}
+      name={id}
+      type={type}
+      placeholder={placeholder}
+      min={type === 'number' ? (id === 'age' ? 10 : 0) : undefined}
+      max={type === 'number' ? (id === 'age' ? 100 : undefined) : undefined}
+      aria-invalid={error ? 'true' : 'false'}
+      aria-describedby={error ? `${id}-error` : undefined}
+      onBlur={() => onBlur(id)}
+    />
   )
 
   return (
-    <label className="modern-field" htmlFor={id}>
-      <span className="modern-field-label">
+    <div className={`modern-field${error ? ' modern-field--error' : ''}`}>
+      <label className="modern-field-label" htmlFor={id}>
         {label}
         {required && <span className="modern-field-required">*</span>}
-      </span>
-      <div className={`modern-field-control${icon ? ' modern-field-control--icon' : ''}`}>
+      </label>
+      <div className={controlClass}>
         {icon && (
           <span className="modern-field-icon" aria-hidden="true">
             <FormIcon name={icon} />
@@ -33,15 +85,21 @@ function DynamicField({ field }) {
         )}
         {inputEl}
       </div>
-    </label>
+      {error ? (
+        <p className="modern-field-error" id={`${id}-error`} role="alert">
+          {error}
+        </p>
+      ) : null}
+    </div>
   )
 }
 
 function ScholarshipForm() {
   const [success, setSuccess] = useState(false)
-  const fields = getFormConfig().filter((f) => f.enabled)
+  const [errors, setErrors] = useState({})
+  const [phoneValues, setPhoneValues] = useState({})
+  const fields = useMemo(() => getFormConfig().filter((f) => f.enabled), [])
 
-  // Group enabled fields by section, preserving order
   const sections = SECTION_OPTIONS.map((sec) => ({
     ...sec,
     fields: fields
@@ -49,10 +107,69 @@ function ScholarshipForm() {
       .sort((a, b) => a.order - b.order),
   })).filter((sec) => sec.fields.length > 0)
 
+  const handlePhoneChange = (fieldId, patch) => {
+    setPhoneValues((prev) => ({
+      ...prev,
+      [fieldId]: {
+        country: DEFAULT_PHONE_COUNTRY,
+        national: '',
+        ...prev[fieldId],
+        ...patch,
+      },
+    }))
+    setErrors((prev) => {
+      if (!prev[fieldId]) return prev
+      const next = { ...prev }
+      delete next[fieldId]
+      return next
+    })
+  }
+
+  const validateSingleField = (fieldId, form) => {
+    const field = fields.find((item) => item.id === fieldId)
+    if (!field) return
+
+    const value = fieldId === 'consent'
+      ? form?.querySelector('[name="consent"]')?.checked
+      : form?.elements[fieldId]?.value
+
+    const error = fieldId === 'consent'
+      ? (value ? '' : 'You must agree to be contacted regarding your application')
+      : validateDynamicField(field, value, phoneValues)
+
+    setErrors((prev) => {
+      const next = { ...prev }
+      if (error) next[fieldId] = error
+      else delete next[fieldId]
+      return next
+    })
+  }
+
+  const handleBlur = (fieldId) => {
+    const form = document.getElementById('scholarship-application-form')
+    validateSingleField(fieldId, form)
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
+    const form = e.currentTarget
+    const formData = new FormData(form)
+    const consentChecked = form.elements.consent?.checked ?? false
+    const nextErrors = validateScholarshipForm(fields, formData, phoneValues, consentChecked)
+
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors)
+      setSuccess(false)
+      const firstErrorId = Object.keys(nextErrors)[0]
+      const firstEl = form.querySelector(`#${firstErrorId}, [name="${firstErrorId}"]`)
+      firstEl?.focus?.()
+      return
+    }
+
+    setErrors({})
     setSuccess(true)
-    e.currentTarget.reset()
+    form.reset()
+    setPhoneValues({})
   }
 
   return (
@@ -70,7 +187,12 @@ function ScholarshipForm() {
         </div>
       </header>
 
-      <form onSubmit={handleSubmit} className="modern-form">
+      <form
+        id="scholarship-application-form"
+        onSubmit={handleSubmit}
+        className="modern-form"
+        noValidate
+      >
         {sections.map((sec) => (
           <div className="modern-form-section" key={sec.value}>
             <h3 className="modern-form-section-title">
@@ -78,26 +200,64 @@ function ScholarshipForm() {
               {sec.label}
             </h3>
 
-            {/* Pair up halfWidth fields into rows of 2, full-width fields solo */}
             {groupIntoRows(sec.fields).map((row, ri) => (
               row.length === 2 ? (
                 <div className="modern-form-row" key={ri}>
-                  {row.map((f) => <DynamicField key={f.id} field={f} />)}
+                  {row.map((f) => (
+                    <DynamicField
+                      key={f.id}
+                      field={f}
+                      error={errors[f.id]}
+                      phoneState={phoneValues[f.id]}
+                      onPhoneChange={handlePhoneChange}
+                      onBlur={handleBlur}
+                    />
+                  ))}
                 </div>
               ) : (
-                <DynamicField key={row[0].id} field={row[0]} />
+                <DynamicField
+                  key={row[0].id}
+                  field={row[0]}
+                  error={errors[row[0].id]}
+                  phoneState={phoneValues[row[0].id]}
+                  onPhoneChange={handlePhoneChange}
+                  onBlur={handleBlur}
+                />
               )
             ))}
           </div>
         ))}
 
-        <label className="modern-form-check">
+        <div className={`modern-form-check${errors.consent ? ' modern-form-check--error' : ''}`}>
           <span className="modern-form-check-icon" aria-hidden="true">
             <FormIcon name="check" />
           </span>
-          <input type="checkbox" required />
-          <span>I agree to be contacted by IWSHA FOUNDATION regarding my application.</span>
-        </label>
+          <input
+            type="checkbox"
+            name="consent"
+            id="consent"
+            aria-invalid={errors.consent ? 'true' : 'false'}
+            aria-describedby={errors.consent ? 'consent-error' : undefined}
+            onBlur={() => handleBlur('consent')}
+            onChange={() => {
+              if (errors.consent) {
+                setErrors((prev) => {
+                  const next = { ...prev }
+                  delete next.consent
+                  return next
+                })
+              }
+            }}
+          />
+          <label htmlFor="consent">
+            I agree to be contacted by IWSHA FOUNDATION regarding my application.
+          </label>
+        </div>
+        {errors.consent ? (
+          <p className="modern-field-error modern-field-error--check" id="consent-error" role="alert">
+            {errors.consent}
+          </p>
+        ) : null}
 
         <div className="modern-form-actions">
           <button type="submit" className="modern-form-btn modern-form-btn--blue">
@@ -119,7 +279,6 @@ function ScholarshipForm() {
   )
 }
 
-/** Group fields: consecutive halfWidth pairs share a row; others are solo */
 function groupIntoRows(fields) {
   const rows = []
   let i = 0

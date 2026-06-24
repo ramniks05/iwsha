@@ -39,6 +39,18 @@ function ScholarshipsPage() {
           </p>
           <span className="scholarships-hub-card-link">Donate Now →</span>
         </Link>
+
+        <Link to="/faq" className="scholarships-hub-card scholarships-hub-card--faq">
+          <span className="scholarships-hub-card-icon" aria-hidden="true">
+            <FormIcon name="message" />
+          </span>
+          <h2>Sponsorship FAQ</h2>
+          <p>
+            Eligibility, application tips, funding coverage, and what sponsors look for
+            in a strong application.
+          </p>
+          <span className="scholarships-hub-card-link">Read FAQ →</span>
+        </Link>
       </div>
     </div>
   )
