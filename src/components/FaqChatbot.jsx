@@ -57,17 +57,25 @@ function FaqAnswerContent({ answer }) {
 }
 
 function FaqChatbot() {
-  const { isOpen, toggleFaqChat, closeFaqChat } = useFaqChat()
+  const { isOpen, openFaqChat, closeFaqChat, openSignal } = useFaqChat()
   const [activeId, setActiveId] = useState(null)
+  const [isMinimized, setIsMinimized] = useState(false)
+  const [isMaximized, setIsMaximized] = useState(false)
   const bodyRef = useRef(null)
 
   const activeFaq = sponsorshipFaqs.find((f) => f.id === activeId)
 
   useEffect(() => {
-    if (bodyRef.current) {
+    if (isOpen) {
+      setIsMinimized(false)
+    }
+  }, [isOpen, openSignal])
+
+  useEffect(() => {
+    if (bodyRef.current && isOpen && !isMinimized) {
       bodyRef.current.scrollTop = bodyRef.current.scrollHeight
     }
-  }, [activeId, isOpen])
+  }, [activeId, isOpen, isMinimized])
 
   const handleQuestion = (id) => {
     setActiveId(id)
@@ -80,13 +88,68 @@ function FaqChatbot() {
   const handleClose = () => {
     closeFaqChat()
     setActiveId(null)
+    setIsMinimized(false)
+    setIsMaximized(false)
   }
 
+  const handleMinimize = () => {
+    setIsMinimized(true)
+    setIsMaximized(false)
+  }
+
+  const handleMaximize = () => {
+    setIsMaximized((v) => !v)
+    setIsMinimized(false)
+  }
+
+  const handleRestore = () => {
+    setIsMinimized(false)
+    openFaqChat()
+  }
+
+  const widgetClass = [
+    'faq-chat-widget',
+    !isOpen ? 'faq-chat-widget--closed' : '',
+    isOpen && isMinimized ? 'faq-chat-widget--minimized' : '',
+    isOpen && isMaximized ? 'faq-chat-widget--maximized' : '',
+    isOpen && !isMinimized && !isMaximized ? 'faq-chat-widget--normal' : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
   return (
-    <>
-      {isOpen && (
+    <div className={widgetClass}>
+      {!isOpen ? (
+        <button
+          type="button"
+          className="faq-chat-launcher"
+          onClick={openFaqChat}
+          aria-label="Open FAQ assistant"
+        >
+          <span className="faq-chat-avatar" aria-hidden="true">💬</span>
+          <span className="faq-chat-launcher-text">
+            <strong>IWSHA Assistant</strong>
+            <span>Sponsorship FAQ</span>
+          </span>
+        </button>
+      ) : (
         <div className="faq-chat-panel" role="dialog" aria-label="FAQ assistant">
-          <header className="faq-chat-header">
+          <header
+            className="faq-chat-header"
+            onClick={isMinimized ? handleRestore : undefined}
+            role={isMinimized ? 'button' : undefined}
+            tabIndex={isMinimized ? 0 : undefined}
+            onKeyDown={
+              isMinimized
+                ? (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      handleRestore()
+                    }
+                  }
+                : undefined
+            }
+          >
             <div className="faq-chat-header-info">
               <span className="faq-chat-avatar" aria-hidden="true">💬</span>
               <div>
@@ -94,78 +157,118 @@ function FaqChatbot() {
                 <span>Sponsorship FAQ</span>
               </div>
             </div>
-            <button type="button" className="faq-chat-close" onClick={handleClose} aria-label="Close chat">
-              ×
-            </button>
+
+            <div className="faq-chat-window-controls" onClick={(e) => e.stopPropagation()}>
+              <button
+                type="button"
+                className="faq-chat-control-btn"
+                onClick={handleMinimize}
+                aria-label="Minimize"
+                title="Minimize"
+              >
+                <svg viewBox="0 0 12 12" aria-hidden="true">
+                  <path d="M2 6h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                className="faq-chat-control-btn"
+                onClick={handleMaximize}
+                aria-label={isMaximized ? 'Restore down' : 'Maximize'}
+                title={isMaximized ? 'Restore down' : 'Maximize'}
+              >
+                {isMaximized ? (
+                  <svg viewBox="0 0 12 12" aria-hidden="true">
+                    <path
+                      d="M4.5 2.5h5v5M2.5 4.5v5h5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.25"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 12 12" aria-hidden="true">
+                    <rect
+                      x="2.5"
+                      y="2.5"
+                      width="7"
+                      height="7"
+                      rx="0.75"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.25"
+                    />
+                  </svg>
+                )}
+              </button>
+              <button
+                type="button"
+                className="faq-chat-control-btn faq-chat-control-btn--close"
+                onClick={handleClose}
+                aria-label="Close"
+                title="Close"
+              >
+                <svg viewBox="0 0 12 12" aria-hidden="true">
+                  <path d="M3 3l6 6M9 3L3 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              </button>
+            </div>
           </header>
 
-          <div className="faq-chat-body" ref={bodyRef}>
-            <div className="faq-chat-msg faq-chat-msg--bot">
-              <div className="faq-chat-bubble">
-                Hello! I can help with sponsorship questions. Choose a topic below:
-              </div>
-            </div>
-
-            {!activeFaq ? (
-              <div className="faq-chat-questions">
-                {sponsorshipFaqs.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    className="faq-chat-question-btn"
-                    onClick={() => handleQuestion(item.id)}
-                  >
-                    {item.question}
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <>
-                <div className="faq-chat-msg faq-chat-msg--user">
-                  <div className="faq-chat-bubble">{activeFaq.question}</div>
-                </div>
+          {!isMinimized && (
+            <>
+              <div className="faq-chat-body" ref={bodyRef}>
                 <div className="faq-chat-msg faq-chat-msg--bot">
-                  <div className="faq-chat-bubble faq-chat-bubble--answer">
-                    <FaqAnswerContent answer={activeFaq.answer} />
+                  <div className="faq-chat-bubble">
+                    Hello! I can help with sponsorship questions. Choose a topic below:
                   </div>
                 </div>
-              </>
-            )}
-          </div>
 
-          <footer className="faq-chat-footer">
-            {activeFaq ? (
-              <button type="button" className="faq-chat-footer-btn" onClick={handleReset}>
-                ← Ask another question
-              </button>
-            ) : (
-              <p className="faq-chat-footer-note">
-                Still need help? <Link to="/contact" onClick={handleClose}>Contact us</Link>
-              </p>
-            )}
-          </footer>
+                {!activeFaq ? (
+                  <div className="faq-chat-questions">
+                    {sponsorshipFaqs.map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        className="faq-chat-question-btn"
+                        onClick={() => handleQuestion(item.id)}
+                      >
+                        {item.question}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <>
+                    <div className="faq-chat-msg faq-chat-msg--user">
+                      <div className="faq-chat-bubble">{activeFaq.question}</div>
+                    </div>
+                    <div className="faq-chat-msg faq-chat-msg--bot">
+                      <div className="faq-chat-bubble faq-chat-bubble--answer">
+                        <FaqAnswerContent answer={activeFaq.answer} />
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <footer className="faq-chat-footer">
+                {activeFaq ? (
+                  <button type="button" className="faq-chat-footer-btn" onClick={handleReset}>
+                    ← Ask another question
+                  </button>
+                ) : (
+                  <p className="faq-chat-footer-note">
+                    Still need help? <Link to="/contact" onClick={handleClose}>Contact us</Link>
+                  </p>
+                )}
+              </footer>
+            </>
+          )}
         </div>
       )}
-
-      <button
-        type="button"
-        className={`faq-chat-toggle${isOpen ? ' faq-chat-toggle--open' : ''}`}
-        onClick={toggleFaqChat}
-        aria-label={isOpen ? 'Close FAQ chat' : 'Open FAQ chat'}
-        aria-expanded={isOpen}
-      >
-        {isOpen ? (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-            <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
-          </svg>
-        ) : (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
-            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M8 10h8M8 14h5" strokeLinecap="round" />
-          </svg>
-        )}
-      </button>
-    </>
+    </div>
   )
 }
 

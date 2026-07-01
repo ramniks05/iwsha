@@ -4,13 +4,23 @@ const FaqChatContext = createContext(null)
 
 export function FaqChatProvider({ children }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [openSignal, setOpenSignal] = useState(0)
 
-  const openFaqChat = useCallback(() => setIsOpen(true), [])
+  const openFaqChat = useCallback(() => {
+    setIsOpen(true)
+    setOpenSignal((s) => s + 1)
+  }, [])
   const closeFaqChat = useCallback(() => setIsOpen(false), [])
-  const toggleFaqChat = useCallback(() => setIsOpen((v) => !v), [])
+  const toggleFaqChat = useCallback(() => {
+    setIsOpen((v) => {
+      const next = !v
+      if (next) setOpenSignal((s) => s + 1)
+      return next
+    })
+  }, [])
 
   return (
-    <FaqChatContext.Provider value={{ isOpen, setIsOpen, openFaqChat, closeFaqChat, toggleFaqChat }}>
+    <FaqChatContext.Provider value={{ isOpen, openSignal, setIsOpen, openFaqChat, closeFaqChat, toggleFaqChat }}>
       {children}
     </FaqChatContext.Provider>
   )
