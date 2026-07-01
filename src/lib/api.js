@@ -6,9 +6,8 @@ async function request(path, options = {}, { isPublic = false } = {}) {
     ...options,
   }
 
-  if (!isPublic) {
-    fetchOptions.credentials = 'include'
-  }
+  // Session cookie required for admin routes; also needed on login/logout
+  fetchOptions.credentials = 'include'
 
   let res
   try {
@@ -36,7 +35,7 @@ async function request(path, options = {}, { isPublic = false } = {}) {
   return json
 }
 
-// Auth
+// Auth — always send cookies for session
 export const login = (username, password) =>
   request('/auth/login', { method: 'POST', body: JSON.stringify({ username, password }) })
 

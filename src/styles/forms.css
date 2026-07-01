@@ -478,6 +478,13 @@
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
+button.scholarships-hub-card {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
 .scholarships-hub-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 36px rgba(5, 44, 101, 0.12);

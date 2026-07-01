@@ -1,9 +1,11 @@
-import { Link } from 'react-router-dom'
 import ScholarshipForm from '../components/ScholarshipForm'
+import { useFaqChat } from '../context/FaqChatContext'
 import { images } from '../data/images'
 import { organization } from '../data/siteConfig'
 
 function ScholarshipApplyPage() {
+  const { openFaqChat } = useFaqChat()
+
   return (
     <div className="form-page">
       <section className="page-hero page-hero--short">
@@ -18,7 +20,9 @@ function ScholarshipApplyPage() {
       <div className="form-page-body">
         <p className="form-page-faq-link">
           Have questions before applying?{' '}
-          <Link to="/faq">Read our sponsorship FAQ</Link>
+          <button type="button" className="form-page-faq-btn" onClick={openFaqChat}>
+            Ask our FAQ assistant
+          </button>
         </p>
         <ScholarshipForm />
       </div>

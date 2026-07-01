@@ -202,7 +202,7 @@ export function validateScholarshipForm(fields, formData, phoneValues, consentCh
   return errors
 }
 
-export function validateDonationForm({ name, email, phoneCountry, phoneNational, amount, message }) {
+export function validateDonationForm({ name, email, phoneCountry, phoneNational, amount, transactionId, message }) {
   const errors = {}
 
   const nameError = validateTextField(
@@ -230,6 +230,17 @@ export function validateDonationForm({ name, email, phoneCountry, phoneNational,
     } else if (num > 99999999) {
       errors.amount = 'Amount exceeds the maximum allowed limit'
     }
+  }
+
+  const txnRaw = String(transactionId ?? '').trim()
+  if (!txnRaw) {
+    errors.transactionId = 'Transaction ID is required'
+  } else if (txnRaw.length < 6) {
+    errors.transactionId = 'Transaction ID must be at least 6 characters'
+  } else if (txnRaw.length > 100) {
+    errors.transactionId = 'Transaction ID must be at most 100 characters'
+  } else if (!/^[a-zA-Z0-9/_\-]+$/.test(txnRaw)) {
+    errors.transactionId = 'Transaction ID can only contain letters, numbers, -, _ and /'
   }
 
   if (message?.trim()) {

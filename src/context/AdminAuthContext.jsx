@@ -8,24 +8,40 @@ export function AdminAuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    getMe()
-      .then((json) => {
-        if (json.ok && json.authenticated) {
-          setAuthed(true)
-          setUser(json.user)
-        }
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false))
+  const applySession = useCallback((json) => {
+    if (json?.ok && json.authenticated) {
+      setAuthed(true)
+      setUser(json.user)
+      return true
+    }
+    setAuthed(false)
+    setUser(null)
+    return false
   }, [])
 
+  const checkSession = useCallback(async () => {
+    const json = await getMe()
+    return applySession(json)
+  }, [applySession])
+
+  useEffect(() => {
+    checkSession().catch(() => {
+      setAuthed(false)
+      setUser(null)
+    }).finally(() => setLoading(false))
+  }, [checkSession])
+
   const login = useCallback(async (username, password) => {
-    const json = await apiLogin(username, password)
-    setAuthed(true)
-    setUser(json.user)
+    await apiLogin(username, password)
+    const ok = await checkSession()
+    if (!ok) {
+      throw new Error(
+        'Login succeeded but session cookie was not saved. Use VITE_API_BASE_URL=/api in dev or check backend CORS/cookie settings.',
+      )
+    }
+    const json = await getMe()
     return json
-  }, [])
+  }, [checkSession])
 
   const logout = useCallback(async () => {
     try {
@@ -38,7 +54,7 @@ export function AdminAuthProvider({ children }) {
   }, [])
 
   return (
-    <AdminAuthContext.Provider value={{ authed, user, loading, login, logout }}>
+    <AdminAuthContext.Provider value={{ authed, user, loading, login, logout, checkSession }}>
       {children}
     </AdminAuthContext.Provider>
   )

@@ -18,7 +18,7 @@ function DonationForm() {
   const [amount, setAmount] = useState('1000')
   const [phoneCountry, setPhoneCountry] = useState(DEFAULT_PHONE_COUNTRY)
   const [phoneNational, setPhoneNational] = useState('')
-  const [formValues, setFormValues] = useState({ name: '', email: '', message: '' })
+  const [formValues, setFormValues] = useState({ name: '', email: '', transactionId: '', message: '' })
   const upiLink = useMemo(() => buildUpiLink(amount), [amount])
 
   const clearError = (field) => {
@@ -37,6 +37,7 @@ function DonationForm() {
       phoneCountry,
       phoneNational,
       amount,
+      transactionId: values.transactionId,
       message: values.message,
     })
 
@@ -56,6 +57,7 @@ function DonationForm() {
       phoneCountry,
       phoneNational,
       amount,
+      transactionId: formValues.transactionId,
       message: formValues.message,
     })
 
@@ -77,11 +79,12 @@ function DonationForm() {
         email: formValues.email.trim(),
         phone: formatPhoneE164(phoneCountry, phoneNational),
         amount: String(amount).trim(),
+        transactionId: formValues.transactionId.trim(),
         message: formValues.message.trim(),
       })
       setDonationSuccess(true)
       event.currentTarget.reset()
-      setFormValues({ name: '', email: '', message: '' })
+      setFormValues({ name: '', email: '', transactionId: '', message: '' })
       setPhoneCountry(DEFAULT_PHONE_COUNTRY)
       setPhoneNational('')
       setAmount('1000')
@@ -208,6 +211,31 @@ function DonationForm() {
             </div>
           </div>
 
+          <div className="modern-form-section">
+            <h3 className="modern-form-section-title">
+              <FormIcon name="check" />
+              Payment Confirmation
+            </h3>
+            <FormField
+              label="Transaction ID"
+              name="transactionId"
+              icon="check"
+              placeholder="UPI / bank transaction reference number"
+              required
+              value={formValues.transactionId}
+              error={errors.transactionId}
+              onChange={(event) => {
+                const transactionId = event.target.value
+                setFormValues((prev) => ({ ...prev, transactionId }))
+                clearError('transactionId')
+              }}
+              onBlur={() => validateField('transactionId')}
+            />
+            <p className="modern-field-hint" style={{ marginTop: '-0.5rem', fontSize: '0.82rem', color: 'var(--muted)' }}>
+              Complete payment using the QR code, then enter the transaction ID from your UPI app or bank receipt.
+            </p>
+          </div>
+
           <FormField
             label="Message (optional)"
             name="message"
@@ -247,7 +275,7 @@ function DonationForm() {
               <span className="modern-form-success-icon" aria-hidden="true">
                 <FormIcon name="check" />
               </span>
-              Thank you! Please complete payment using the QR code on the right.
+              Thank you! Your donation details and transaction ID have been submitted successfully.
             </p>
           )}
         </form>

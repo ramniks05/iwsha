@@ -6,7 +6,6 @@ import ScholarshipsPage from './pages/ScholarshipsPage'
 import ScholarshipApplyPage from './pages/ScholarshipApplyPage'
 import DonationPage from './pages/DonationPage'
 import ContactPage from './pages/ContactPage'
-import FaqPage from './pages/FaqPage'
 import UniversityDetailPage from './pages/UniversityDetailPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import AdminDashboardPage from './pages/AdminDashboardPage'
@@ -18,8 +17,10 @@ import RequireAdmin from './components/RequireAdmin'
 import SocialLinks from './components/SocialLinks'
 import FooterDonateQr from './components/FooterDonateQr'
 import WhatsAppButton from './components/WhatsAppButton'
+import FaqChatbot from './components/FaqChatbot'
 import iwshaLogo from './assets/iwsha-logo.png'
 import { AdminAuthProvider } from './context/AdminAuthContext'
+import { FaqChatProvider, useFaqChat } from './context/FaqChatContext'
 import { contactInfo, getWhatsAppLink, organization } from './data/siteConfig'
 import './styles/site.css'
 
@@ -27,7 +28,7 @@ const navItems = [
   { to: '/', label: 'Home', end: true },
   { to: '/programs', label: 'Programs' },
   { to: '/scholarships', label: 'Scholarships' },
-  { to: '/faq', label: 'FAQ' },
+  { action: 'faq', label: 'FAQ' },
   { to: '/contact', label: 'Contact' },
 ]
 
@@ -36,8 +37,9 @@ function App() {
   const closeMenu = () => setMenuOpen(false)
 
   return (
-    <AdminAuthProvider>
-      <Routes>
+    <FaqChatProvider>
+      <AdminAuthProvider>
+        <Routes>
         {/* ── Admin routes (login + protected panel) ── */}
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route
@@ -63,11 +65,19 @@ function App() {
         {/* ── Public routes (with site header + footer) ── */}
         <Route path="*" element={<PublicLayout menuOpen={menuOpen} setMenuOpen={setMenuOpen} closeMenu={closeMenu} />} />
       </Routes>
-    </AdminAuthProvider>
+      </AdminAuthProvider>
+    </FaqChatProvider>
   )
 }
 
 function PublicLayout({ menuOpen, setMenuOpen, closeMenu }) {
+  const { openFaqChat } = useFaqChat()
+
+  const openFaq = () => {
+    openFaqChat()
+    closeMenu()
+  }
+
   return (
     <div className="app">
       {/* Top bar */}
@@ -105,9 +115,15 @@ function PublicLayout({ menuOpen, setMenuOpen, closeMenu }) {
           <div className={`header-right ${menuOpen ? 'open' : ''}`}>
             <nav className="nav">
               {navItems.map((item) => (
-                <NavLink key={item.to} to={item.to} end={item.end} onClick={closeMenu}>
-                  {item.label}
-                </NavLink>
+                item.action === 'faq' ? (
+                  <button key="faq" type="button" className="nav-faq-btn" onClick={openFaq}>
+                    {item.label}
+                  </button>
+                ) : (
+                  <NavLink key={item.to} to={item.to} end={item.end} onClick={closeMenu}>
+                    {item.label}
+                  </NavLink>
+                )
               ))}
             </nav>
             <div className="header-actions">
@@ -134,7 +150,6 @@ function PublicLayout({ menuOpen, setMenuOpen, closeMenu }) {
           <Route path="/scholarships" element={<ScholarshipsPage />} />
           <Route path="/scholarships/apply" element={<ScholarshipApplyPage />} />
           <Route path="/scholarships/donate" element={<DonationPage />} />
-          <Route path="/faq" element={<FaqPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/universities/:slug" element={<UniversityDetailPage />} />
         </Routes>
@@ -161,7 +176,7 @@ function PublicLayout({ menuOpen, setMenuOpen, closeMenu }) {
             <NavLink to="/">Home</NavLink>
             <NavLink to="/programs">Programs</NavLink>
             <NavLink to="/scholarships">Scholarships</NavLink>
-            <NavLink to="/faq">FAQ</NavLink>
+            <button type="button" className="footer-faq-btn" onClick={openFaq}>FAQ</button>
             <NavLink to="/scholarships/donate">Donate</NavLink>
             <NavLink to="/contact">Contact Us</NavLink>
           </div>
@@ -188,6 +203,7 @@ function PublicLayout({ menuOpen, setMenuOpen, closeMenu }) {
       </footer>
 
       <WhatsAppButton />
+      <FaqChatbot />
     </div>
   )
 }

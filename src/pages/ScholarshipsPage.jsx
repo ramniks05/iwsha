@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom'
 import FormIcon from '../components/FormIcon'
+import { useFaqChat } from '../context/FaqChatContext'
 import { images } from '../data/images'
 import { organization } from '../data/siteConfig'
 
 function ScholarshipsPage() {
+  const { openFaqChat } = useFaqChat()
+
   return (
     <div className="scholarships-page">
       <section className="page-hero page-hero--short">
@@ -40,7 +43,11 @@ function ScholarshipsPage() {
           <span className="scholarships-hub-card-link">Donate Now →</span>
         </Link>
 
-        <Link to="/faq" className="scholarships-hub-card scholarships-hub-card--faq">
+        <button
+          type="button"
+          className="scholarships-hub-card scholarships-hub-card--faq"
+          onClick={openFaqChat}
+        >
           <span className="scholarships-hub-card-icon" aria-hidden="true">
             <FormIcon name="message" />
           </span>
@@ -49,8 +56,8 @@ function ScholarshipsPage() {
             Eligibility, application tips, funding coverage, and what sponsors look for
             in a strong application.
           </p>
-          <span className="scholarships-hub-card-link">Read FAQ →</span>
-        </Link>
+          <span className="scholarships-hub-card-link">Ask a Question →</span>
+        </button>
       </div>
     </div>
   )

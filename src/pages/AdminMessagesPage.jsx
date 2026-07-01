@@ -92,6 +92,7 @@ function AdminMessagesPage() {
                   <th>Email</th>
                   <th>Phone</th>
                   <th>Subject / Amount</th>
+                  <th>Transaction ID</th>
                   <th>Message</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -114,6 +115,9 @@ function AdminMessagesPage() {
                         {msg.type === 'donation' && msg.amount
                           ? `₹${Number(msg.amount).toLocaleString('en-IN')}`
                           : msg.subject || '—'}
+                      </td>
+                      <td className="admin-table-cell--nowrap">
+                        {msg.transactionId || msg.transaction_id || '—'}
                       </td>
                       <td className="admin-table-cell--reason" title={msg.message || ''}>
                         {msg.message || '—'}
