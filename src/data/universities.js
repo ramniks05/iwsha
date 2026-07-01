@@ -1,7 +1,5 @@
 import { images } from './images'
 
-export const STORAGE_KEY = 'iwsha_universities'
-
 export const defaultUniversities = [
   {
     id: 'eth-zurich',
@@ -226,38 +224,3 @@ export const defaultUniversities = [
     applyLink: '/scholarships/apply',
   },
 ]
-
-export function getUniversities() {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored) {
-      const extra = JSON.parse(stored)
-      return [...defaultUniversities, ...extra]
-    }
-  } catch {
-    // ignore
-  }
-  return defaultUniversities
-}
-
-export function saveUniversity(uni) {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    const extra = stored ? JSON.parse(stored) : []
-    extra.push(uni)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(extra))
-  } catch {
-    // ignore
-  }
-}
-
-export function deleteUniversity(id) {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (!stored) return
-    const extra = JSON.parse(stored).filter((u) => u.id !== id)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(extra))
-  } catch {
-    // ignore
-  }
-}

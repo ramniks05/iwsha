@@ -1,29 +1,46 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getFormConfig } from '../data/formConfig'
-import { getUniversities } from '../data/universities'
+import { getApplications, getMessages, getUniversities } from '../lib/api'
 
-function StatCard({ icon, label, value, to, color }) {
+function StatCard({ icon, label, value, to, color, sub }) {
   return (
     <Link to={to} className={`admin-dash-card admin-dash-card--${color}`}>
       <span className="admin-dash-card-icon">{icon}</span>
       <strong>{value}</strong>
-      <span>{label}</span>
+      <span>{label}{sub ? ` (${sub})` : ''}</span>
       <span className="admin-dash-card-arrow">→</span>
     </Link>
   )
 }
 
 function AdminDashboardPage() {
-  const unis = getUniversities()
-  const fields = getFormConfig()
-  const customUnis = unis.filter((u) => !u.isDefault && u.id?.startsWith('custom'))
-  const activeFields = fields.filter((f) => f.enabled)
+  const [stats, setStats] = useState({ universities: 0, custom: 0, applications: 0, newApps: 0, messages: 0, newMsgs: 0 })
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    Promise.all([getUniversities(), getApplications(), getMessages()])
+      .then(([uniRes, appRes, msgRes]) => {
+        const unis = uniRes.data || []
+        const apps = appRes.data || []
+        const msgs = msgRes.data || []
+        setStats({
+          universities: unis.length,
+          custom: unis.filter((u) => !u.isDefault).length,
+          applications: apps.length,
+          newApps: apps.filter((a) => (a.status || 'new') === 'new').length,
+          messages: msgs.length,
+          newMsgs: msgs.filter((m) => (m.status || 'new') === 'new').length,
+        })
+      })
+      .catch((err) => setError(err.message || 'Failed to load data from backend.'))
+      .finally(() => setLoading(false))
+  }, [])
 
   const quickLinks = [
-    { label: 'Add University', to: '/admin/universities', desc: 'Add a new university listing visible on the Programs page.' },
-    { label: 'Build Scholarship Form', to: '/admin/form-builder', desc: 'Add, remove or reorder fields on the scholarship application form.' },
-    { label: 'View Programs Page', to: '/programs', desc: 'See how universities appear to visitors.' },
-    { label: 'Preview Scholarship Form', to: '/scholarships/apply', desc: 'Preview the live form as applicants see it.' },
+    { label: 'Manage Universities', to: '/admin/universities', desc: 'Add or remove university listings visible on the Programs page.' },
+    { label: 'View Applications', to: '/admin/applications', desc: 'Review scholarship applications submitted by students.' },
+    { label: 'View Messages', to: '/admin/messages', desc: 'Read contact and donation submissions from the public site.' },
   ]
 
   return (
@@ -39,39 +56,18 @@ function AdminDashboardPage() {
       </div>
 
       <div className="admin-body">
-        {/* Stats */}
+        {error && (
+          <div className="admin-dash-note" style={{ marginBottom: '1rem', background: '#fef2f2', borderColor: '#fecaca', color: '#991b1b' }}>
+            {error}
+          </div>
+        )}
         <div className="admin-dash-stats">
-          <StatCard
-            icon="🎓"
-            label="Universities Listed"
-            value={unis.length}
-            to="/admin/universities"
-            color="blue"
-          />
-          <StatCard
-            icon="✏️"
-            label="Custom Universities"
-            value={customUnis.length}
-            to="/admin/universities"
-            color="orange"
-          />
-          <StatCard
-            icon="📋"
-            label="Active Form Fields"
-            value={activeFields.length}
-            to="/admin/form-builder"
-            color="green"
-          />
-          <StatCard
-            icon="🔧"
-            label="Total Form Fields"
-            value={fields.length}
-            to="/admin/form-builder"
-            color="navy"
-          />
+          <StatCard icon="🎓" label="Universities Listed" value={loading ? '…' : stats.universities} to="/admin/universities" color="blue" />
+          <StatCard icon="✏️" label="Custom Universities" value={loading ? '…' : stats.custom} to="/admin/universities" color="orange" />
+          <StatCard icon="📩" label="Applications" value={loading ? '…' : stats.applications} sub={loading ? null : `${stats.newApps} new`} to="/admin/applications" color="green" />
+          <StatCard icon="💬" label="Messages" value={loading ? '…' : stats.messages} sub={loading ? null : `${stats.newMsgs} new`} to="/admin/messages" color="navy" />
         </div>
 
-        {/* Quick links */}
         <div className="admin-list-card">
           <h2 className="admin-section-title">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
@@ -91,20 +87,6 @@ function AdminDashboardPage() {
               </Link>
             ))}
           </div>
-        </div>
-
-        {/* Info note */}
-        <div className="admin-dash-note">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M12 8v4M12 16h.01" strokeLinecap="round"/>
-          </svg>
-          <p>
-            All changes are currently saved in your browser (localStorage).
-            When your PHP backend is ready, replace the storage calls in{' '}
-            <code>src/data/formConfig.js</code> and <code>src/data/universities.js</code>
-            {' '}with API endpoints — the admin UI will work without any further changes.
-          </p>
         </div>
       </div>
     </div>

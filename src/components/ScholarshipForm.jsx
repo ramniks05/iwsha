@@ -2,8 +2,9 @@ import { useMemo, useState } from 'react'
 import FormIcon from './FormIcon'
 import PhoneField from './PhoneField'
 import { DEFAULT_PHONE_COUNTRY } from '../data/countryPhoneOptions'
-import { SECTION_OPTIONS, getFormConfig } from '../data/formConfig'
-import { validateDynamicField, validateScholarshipForm } from '../utils/formValidation'
+import { SECTION_OPTIONS, SCHOLARSHIP_FIELDS } from '../data/formConfig'
+import { submitApplication } from '../lib/api'
+import { formatPhoneE164, validateDynamicField, validateScholarshipForm } from '../utils/formValidation'
 import '../styles/forms.css'
 
 function DynamicField({ field, error, phoneState, onPhoneChange, onBlur }) {
@@ -96,9 +97,10 @@ function DynamicField({ field, error, phoneState, onPhoneChange, onBlur }) {
 
 function ScholarshipForm() {
   const [success, setSuccess] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const [errors, setErrors] = useState({})
   const [phoneValues, setPhoneValues] = useState({})
-  const fields = useMemo(() => getFormConfig().filter((f) => f.enabled), [])
+  const fields = useMemo(() => SCHOLARSHIP_FIELDS, [])
 
   const sections = SECTION_OPTIONS.map((sec) => ({
     ...sec,
@@ -150,7 +152,7 @@ function ScholarshipForm() {
     validateSingleField(fieldId, form)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const form = e.currentTarget
     const formData = new FormData(form)
@@ -166,10 +168,34 @@ function ScholarshipForm() {
       return
     }
 
+    setSubmitting(true)
     setErrors({})
-    setSuccess(true)
-    form.reset()
-    setPhoneValues({})
+
+    const phoneState = phoneValues.phone
+    const payload = {
+      studentName: String(formData.get('studentName') ?? '').trim(),
+      age: String(formData.get('age') ?? '').trim(),
+      guardian: String(formData.get('guardian') ?? '').trim(),
+      phone: formatPhoneE164(phoneState?.country, phoneState?.national)
+        || String(formData.get('phone') ?? '').trim(),
+      email: String(formData.get('email') ?? '').trim(),
+      education: String(formData.get('education') ?? '').trim(),
+      destination: String(formData.get('destination') ?? '').trim(),
+      income: String(formData.get('income') ?? '').trim(),
+      reason: String(formData.get('reason') ?? '').trim(),
+    }
+
+    try {
+      await submitApplication(payload)
+      setSuccess(true)
+      form.reset()
+      setPhoneValues({})
+    } catch (err) {
+      setErrors({ _form: err.message || 'Submission failed. Please try again.' })
+      setSuccess(false)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -260,11 +286,15 @@ function ScholarshipForm() {
         ) : null}
 
         <div className="modern-form-actions">
-          <button type="submit" className="modern-form-btn modern-form-btn--blue">
+          <button type="submit" className="modern-form-btn modern-form-btn--blue" disabled={submitting}>
             <FormIcon name="send" />
-            Submit Application
+            {submitting ? 'Submitting…' : 'Submit Application'}
           </button>
         </div>
+
+        {errors._form && (
+          <p className="modern-field-error" role="alert">{errors._form}</p>
+        )}
 
         {success && (
           <p className="modern-form-success" role="status">

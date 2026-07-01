@@ -1,10 +1,20 @@
 import { Link, useParams } from 'react-router-dom'
-import { getUniversities } from '../data/universities'
+import { useUniversities } from '../hooks/useUniversities'
 
 function UniversityDetailPage() {
   const { slug } = useParams()
-  const universities = getUniversities()
+  const { universities, loading } = useUniversities()
   const uni = universities.find((u) => u.slug === slug)
+
+  if (loading) {
+    return (
+      <div className="uni-detail-notfound">
+        <div className="uni-detail-notfound-inner">
+          <p>Loading university…</p>
+        </div>
+      </div>
+    )
+  }
 
   if (!uni) {
     return (
@@ -21,7 +31,6 @@ function UniversityDetailPage() {
 
   return (
     <div className="uni-detail-page">
-      {/* Hero banner */}
       <div className="uni-detail-hero">
         <img src={uni.image} alt={uni.name} className="uni-detail-hero-img" />
         <div className="uni-detail-hero-overlay" />
@@ -36,7 +45,6 @@ function UniversityDetailPage() {
       </div>
 
       <div className="uni-detail-body">
-        {/* Highlights strip */}
         <div className="uni-detail-highlights">
           {uni.highlights.map((h) => (
             <div className="uni-detail-highlight" key={h.label}>
@@ -48,9 +56,7 @@ function UniversityDetailPage() {
         </div>
 
         <div className="uni-detail-grid">
-          {/* Left column */}
           <div className="uni-detail-main">
-            {/* Overview */}
             <section className="uni-detail-section">
               <h2 className="uni-detail-section-title">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2 2" strokeLinecap="round"/></svg>
@@ -59,7 +65,6 @@ function UniversityDetailPage() {
               <p className="uni-detail-overview">{uni.overview}</p>
             </section>
 
-            {/* Programs */}
             <section className="uni-detail-section">
               <h2 className="uni-detail-section-title">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true"><path d="M12 3L2 8l10 5 10-5-10-5z" strokeLinejoin="round"/><path d="M6 11v4c0 2.5 2.7 4.5 6 4.5s6-2 6-4.5v-4" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -75,7 +80,6 @@ function UniversityDetailPage() {
               </ul>
             </section>
 
-            {/* Requirements */}
             <section className="uni-detail-section">
               <h2 className="uni-detail-section-title">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12l2.5 2.5L16 9" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -92,7 +96,6 @@ function UniversityDetailPage() {
             </section>
           </div>
 
-          {/* Right sidebar */}
           <aside className="uni-detail-sidebar">
             <div className="uni-detail-info-card">
               <h3>Key Information</h3>

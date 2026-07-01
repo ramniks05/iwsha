@@ -1,4 +1,5 @@
 import { images } from '../data/images'
+import ContactForm from '../components/ContactForm'
 import { contactInfo, getWhatsAppLink, socialLinks } from '../data/siteConfig'
 
 function ContactPage() {
@@ -62,6 +63,10 @@ function ContactPage() {
           </div>
         </div>
 
+        <ContactForm />
+      </section>
+
+      <section className="contact-map-section" style={{ padding: '0 1.5rem 3rem', maxWidth: 1200, margin: '0 auto' }}>
         <div className="contact-map-card">
           <h2>Find Us on Map</h2>
           <p className="map-address">{contactInfo.address}, {contactInfo.addressLine2}</p>

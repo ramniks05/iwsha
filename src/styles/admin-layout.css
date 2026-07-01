@@ -666,3 +666,145 @@
     padding: 1.25rem 1rem;
   }
 }
+
+/* ── Admin data tables ── */
+.admin-table-wrap {
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid rgba(5, 44, 101, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(5, 44, 101, 0.04);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+  min-width: 960px;
+}
+
+.admin-table thead {
+  background: #f8fafc;
+  border-bottom: 2px solid rgba(5, 44, 101, 0.08);
+}
+
+.admin-table th {
+  padding: 0.75rem 0.85rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--navy);
+  white-space: nowrap;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.admin-table td {
+  padding: 0.7rem 0.85rem;
+  border-bottom: 1px solid rgba(5, 44, 101, 0.06);
+  color: #334155;
+  vertical-align: top;
+  line-height: 1.45;
+}
+
+.admin-table tbody tr:hover {
+  background: #f8fbff;
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table td.admin-table-cell--nowrap {
+  white-space: nowrap;
+}
+
+.admin-table td.admin-table-cell--reason {
+  max-width: 220px;
+  word-break: break-word;
+}
+
+.admin-table td.admin-table-cell--actions {
+  white-space: nowrap;
+}
+
+.admin-table-select {
+  padding: 0.3rem 0.45rem;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.8rem;
+  background: #fff;
+  color: var(--navy);
+}
+
+.admin-status-badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.admin-status-badge--new {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.admin-status-badge--reviewed {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.admin-status-badge--approved {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.admin-status-badge--rejected {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.admin-status-badge--read {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.admin-filter-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin-filter-tab {
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid rgba(5, 44, 101, 0.12);
+  background: #fff;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--navy);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.admin-filter-tab:hover {
+  background: #f8fafc;
+}
+
+.admin-filter-tab--active {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+
+.admin-table-empty {
+  padding: 2rem;
+  text-align: center;
+  color: var(--muted);
+  background: #fff;
+  border: 1px solid rgba(5, 44, 101, 0.08);
+  border-radius: 12px;
+}

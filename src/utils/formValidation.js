@@ -151,7 +151,7 @@ function validateTextareaField(value, field, rules = {}) {
 }
 
 export function validateDynamicField(field, value, phoneState) {
-  if (!field.enabled) return ''
+  if (field.enabled === false) return ''
 
   if (field.type === 'tel') {
     const state = phoneState?.[field.id] ?? phoneState
@@ -240,6 +240,43 @@ export function validateDonationForm({ name, email, phoneCountry, phoneNational,
     )
     if (messageError) errors.message = messageError
   }
+
+  return errors
+}
+
+export function validateContactForm({ name, email, phoneCountry, phoneNational, subject, message }) {
+  const errors = {}
+
+  const nameError = validateTextField(
+    name,
+    { required: true, label: 'Full name' },
+    { minLength: 2, maxLength: 100, pattern: NAME_PATTERN, label: 'Full name' },
+  )
+  if (nameError) errors.name = nameError
+
+  const emailError = validateEmailField(email, true)
+  if (emailError) errors.email = emailError
+
+  if (phoneNational?.trim()) {
+    const phoneError = validatePhoneField(phoneCountry, phoneNational, false)
+    if (phoneError) errors.phone = phoneError
+  }
+
+  if (subject?.trim()) {
+    const subjectError = validateTextField(
+      subject,
+      { required: false, label: 'Subject' },
+      { maxLength: 200, label: 'Subject' },
+    )
+    if (subjectError) errors.subject = subjectError
+  }
+
+  const messageError = validateTextField(
+    message,
+    { required: true, label: 'Message' },
+    { minLength: 10, maxLength: 2000, label: 'Message' },
+  )
+  if (messageError) errors.message = messageError
 
   return errors
 }

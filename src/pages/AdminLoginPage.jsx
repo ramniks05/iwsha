@@ -19,23 +19,22 @@ function AdminLoginPage() {
     setError('')
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!form.username.trim() || !form.password) {
       setError('Please enter both username and password.')
       return
     }
     setLoading(true)
-    // Slight delay to simulate network — remove when using real API
-    setTimeout(() => {
-      const ok = login(form.username.trim(), form.password)
-      if (ok) {
-        navigate(from, { replace: true })
-      } else {
-        setError('Invalid username or password. Please try again.')
-        setLoading(false)
-      }
-    }, 500)
+    setError('')
+    try {
+      await login(form.username.trim(), form.password)
+      navigate(from, { replace: true })
+    } catch (err) {
+      setError(err.message || 'Invalid username or password. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -60,7 +59,7 @@ function AdminLoginPage() {
         <div className="admin-login-divider" />
 
         <h1 className="admin-login-title">Sign in to Admin</h1>
-        <p className="admin-login-sub">Manage universities, forms, and content.</p>
+        <p className="admin-login-sub">Manage universities, applications, and messages.</p>
 
         <form onSubmit={handleSubmit} className="admin-login-form" noValidate>
           {/* Username */}

@@ -5,13 +5,15 @@ import FormIcon from './FormIcon'
 import PhoneField from './PhoneField'
 import { DEFAULT_PHONE_COUNTRY } from '../data/countryPhoneOptions'
 import { buildUpiLink, paymentDetails } from '../data/paymentConfig'
-import { validateDonationForm } from '../utils/formValidation'
+import { validateDonationForm, formatPhoneE164 } from '../utils/formValidation'
+import { sendMessage } from '../lib/api'
 import '../styles/forms.css'
 
 const quickAmounts = [500, 1000, 5000]
 
 function DonationForm() {
   const [donationSuccess, setDonationSuccess] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const [errors, setErrors] = useState({})
   const [amount, setAmount] = useState('1000')
   const [phoneCountry, setPhoneCountry] = useState(DEFAULT_PHONE_COUNTRY)
@@ -46,7 +48,7 @@ function DonationForm() {
     })
   }
 
-  const handleDonationSubmit = (event) => {
+  const handleDonationSubmit = async (event) => {
     event.preventDefault()
     const nextErrors = validateDonationForm({
       name: formValues.name,
@@ -65,13 +67,30 @@ function DonationForm() {
       return
     }
 
+    setSubmitting(true)
     setErrors({})
-    setDonationSuccess(true)
-    event.currentTarget.reset()
-    setFormValues({ name: '', email: '', message: '' })
-    setPhoneCountry(DEFAULT_PHONE_COUNTRY)
-    setPhoneNational('')
-    setAmount('1000')
+
+    try {
+      await sendMessage({
+        type: 'donation',
+        name: formValues.name.trim(),
+        email: formValues.email.trim(),
+        phone: formatPhoneE164(phoneCountry, phoneNational),
+        amount: String(amount).trim(),
+        message: formValues.message.trim(),
+      })
+      setDonationSuccess(true)
+      event.currentTarget.reset()
+      setFormValues({ name: '', email: '', message: '' })
+      setPhoneCountry(DEFAULT_PHONE_COUNTRY)
+      setPhoneNational('')
+      setAmount('1000')
+    } catch (err) {
+      setErrors({ _form: err.message || 'Submission failed. Please try again.' })
+      setDonationSuccess(false)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -213,11 +232,15 @@ function DonationForm() {
           </FormField>
 
           <div className="modern-form-actions">
-            <button type="submit" className="modern-form-btn modern-form-btn--orange">
+            <button type="submit" className="modern-form-btn modern-form-btn--orange" disabled={submitting}>
               <FormIcon name="donate" />
-              Submit Donation
+              {submitting ? 'Submitting…' : 'Submit Donation'}
             </button>
           </div>
+
+          {errors._form && (
+            <p className="modern-field-error" role="alert">{errors._form}</p>
+          )}
 
           {donationSuccess && (
             <p className="modern-form-success" role="status">

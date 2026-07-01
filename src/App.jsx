@@ -11,7 +11,9 @@ import UniversityDetailPage from './pages/UniversityDetailPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import AdminDashboardPage from './pages/AdminDashboardPage'
 import AdminUniversitiesPage from './pages/AdminUniversitiesPage'
-import AdminFormPage from './pages/AdminFormPage'
+import AdminApplicationsPage from './pages/AdminApplicationsPage'
+import AdminMessagesPage from './pages/AdminMessagesPage'
+import AdminChangePasswordPage from './pages/AdminChangePasswordPage'
 import RequireAdmin from './components/RequireAdmin'
 import SocialLinks from './components/SocialLinks'
 import FooterDonateQr from './components/FooterDonateQr'
@@ -47,10 +49,17 @@ function App() {
           element={<RequireAdmin><AdminUniversitiesPage /></RequireAdmin>}
         />
         <Route
-          path="/admin/form-builder"
-          element={<RequireAdmin><AdminFormPage /></RequireAdmin>}
+          path="/admin/applications"
+          element={<RequireAdmin><AdminApplicationsPage /></RequireAdmin>}
         />
-
+        <Route
+          path="/admin/messages"
+          element={<RequireAdmin><AdminMessagesPage /></RequireAdmin>}
+        />
+        <Route
+          path="/admin/change-password"
+          element={<RequireAdmin><AdminChangePasswordPage /></RequireAdmin>}
+        />
         {/* ── Public routes (with site header + footer) ── */}
         <Route path="*" element={<PublicLayout menuOpen={menuOpen} setMenuOpen={setMenuOpen} closeMenu={closeMenu} />} />
       </Routes>

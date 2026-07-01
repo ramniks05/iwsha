@@ -2,11 +2,10 @@ import { Link } from 'react-router-dom'
 import { images } from '../data/images'
 import { organization } from '../data/siteConfig'
 import { overseasDestinations, testimonials } from '../data/siteData'
-import { getUniversities } from '../data/universities'
-
-const universities = getUniversities()
+import { useUniversities } from '../hooks/useUniversities'
 
 function ProgramsPage() {
+  const { universities, loading, error } = useUniversities()
   return (
     <div className="programs-page">
       <section className="page-hero">
@@ -46,21 +45,31 @@ function ProgramsPage() {
           </p>
         </div>
         <div className="uni-grid">
-          {universities.map((item) => (
-            <Link
-              to={`/universities/${item.slug}`}
-              className="uni-card uni-card--link"
-              key={item.id || item.name}
-            >
-              <img src={item.image} alt={item.name} />
-              <div className="uni-card-body">
-                <span className="uni-location">{item.location}</span>
-                <h3>{item.name}</h3>
-                <p>{item.tagline || item.details}</p>
-                <span className="uni-card-cta">View Details →</span>
-              </div>
-            </Link>
-          ))}
+          {loading ? (
+            <p style={{ gridColumn: '1 / -1', color: 'var(--muted)' }}>Loading universities from backend…</p>
+          ) : error ? (
+            <p style={{ gridColumn: '1 / -1', color: '#b91c1c' }}>
+              {error} — ensure XAMPP is running and schloarship-backend is available.
+            </p>
+          ) : universities.length === 0 ? (
+            <p style={{ gridColumn: '1 / -1', color: 'var(--muted)' }}>No universities found in database.</p>
+          ) : (
+            universities.map((item) => (
+              <Link
+                to={`/universities/${item.slug}`}
+                className="uni-card uni-card--link"
+                key={item.id || item.name}
+              >
+                <img src={item.image} alt={item.name} />
+                <div className="uni-card-body">
+                  <span className="uni-location">{item.location}</span>
+                  <h3>{item.name}</h3>
+                  <p>{item.tagline || item.details}</p>
+                  <span className="uni-card-cta">View Details →</span>
+                </div>
+              </Link>
+            ))
+          )}
         </div>
       </section>
 
