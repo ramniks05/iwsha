@@ -17,8 +17,8 @@ export default defineConfig(({ mode }) => {
               target: LOCAL_BACKEND,
               changeOrigin: true,
               secure: false,
-              // Rewrite session cookie so browser sends it on localhost:5173/api/*
-              cookieDomainRewrite: 'localhost',
+              // Host-only cookie (works for localhost and 127.0.0.1)
+              cookieDomainRewrite: '',
               cookiePathRewrite: '/',
             },
           }

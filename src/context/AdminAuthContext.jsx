@@ -36,7 +36,7 @@ export function AdminAuthProvider({ children }) {
     const ok = await checkSession()
     if (!ok) {
       throw new Error(
-        'Login succeeded but session cookie was not saved. Use VITE_API_BASE_URL=/api in dev or check backend CORS/cookie settings.',
+        'Login succeeded but the session was not saved. On live, redeploy with VITE_API_BASE_URL=/api (Vercel proxy) and ensure the backend session folder is writable.',
       )
     }
     const json = await getMe()
