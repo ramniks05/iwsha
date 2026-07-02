@@ -24,7 +24,7 @@ async function request(path, options = {}, { isPublic = false } = {}) {
     json = JSON.parse(text)
   } catch {
     throw new Error(
-      'Backend returned an invalid response. Check VITE_API_BASE_URL in .env points to schloarship-backend.',
+      `Backend returned an invalid response (not JSON). Check that the API is running at ${BASE} and returns JSON.`,
     )
   }
 

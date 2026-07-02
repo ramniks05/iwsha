@@ -36,7 +36,7 @@ export function AdminAuthProvider({ children }) {
     const ok = await checkSession()
     if (!ok) {
       throw new Error(
-        'Login succeeded but the session was not saved. On live, redeploy with VITE_API_BASE_URL=/api (Vercel proxy) and ensure the backend session folder is writable.',
+        'Login succeeded but the session was not saved. Check backend CORS (allow www.iwshatrust.org), session cookies (SameSite=None; Secure), and storage/sessions/ on the server.',
       )
     }
     const json = await getMe()
