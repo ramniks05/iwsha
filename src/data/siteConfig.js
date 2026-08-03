@@ -15,9 +15,9 @@ export const organization = {
 }
 
 export const contactInfo = {
-  phone: '+91 98765 43210',
-  phoneRaw: '919876543210',
-  email: 'support@iwshafoundation.org',
+  phone: '+91 93077 79998',
+  phoneRaw: '919307779998',
+  email: 'support@iwshatrust.org',
   address: 'G-33, Indira Deep Complex, Lucknow',
   addressLine2: 'Uttar Pradesh, India',
   hours: 'Mon – Sat, 9:30 AM – 6:30 PM',

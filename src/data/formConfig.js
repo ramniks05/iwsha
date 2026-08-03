@@ -25,7 +25,7 @@ export const SCHOLARSHIP_FIELDS = [
   },
   {
     id: 'phone', label: 'Phone', type: 'tel',
-    icon: 'phone', placeholder: '+91 98765 43210', required: true,
+    icon: 'phone', placeholder: '+91 93077 79998', required: true,
     section: 'personal', halfWidth: true, order: 3,
   },
   {

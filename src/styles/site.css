@@ -1767,16 +1767,18 @@
   margin-bottom: 0.65rem;
 }
 
-.footer-upi-id {
+.footer-qr-wrap img {
+  display: block;
+  width: 110px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.footer-pay-id {
   margin: 0 0 0.65rem;
   font-size: 0.78rem;
   color: #94a3b8;
   word-break: break-all;
-}
-
-.footer-upi-id::before {
-  content: 'UPI: ';
-  opacity: 0.7;
 }
 
 .footer-donate-link {

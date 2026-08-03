@@ -1,10 +1,9 @@
-import { useMemo, useState } from 'react'
-import { QRCodeSVG } from 'qrcode.react'
+import { useState } from 'react'
 import FormField from './FormField'
 import FormIcon from './FormIcon'
 import PhoneField from './PhoneField'
 import { DEFAULT_PHONE_COUNTRY } from '../data/countryPhoneOptions'
-import { buildUpiLink, paymentDetails } from '../data/paymentConfig'
+import { paymentDetails, paymentQrImage } from '../data/paymentConfig'
 import { validateDonationForm, formatPhoneE164 } from '../utils/formValidation'
 import { sendMessage } from '../lib/api'
 import '../styles/forms.css'
@@ -19,7 +18,6 @@ function DonationForm() {
   const [phoneCountry, setPhoneCountry] = useState(DEFAULT_PHONE_COUNTRY)
   const [phoneNational, setPhoneNational] = useState('')
   const [formValues, setFormValues] = useState({ name: '', email: '', transactionId: '', message: '' })
-  const upiLink = useMemo(() => buildUpiLink(amount), [amount])
 
   const clearError = (field) => {
     setErrors((prev) => {
@@ -286,16 +284,16 @@ function DonationForm() {
             <h3>Scan to Pay</h3>
           </div>
           <div className="modern-pay-qr">
-            <QRCodeSVG value={upiLink} size={168} level="M" includeMargin />
+            <img src={paymentQrImage} alt="Scan to pay via UPI" width={168} height={168} />
           </div>
           {Number(amount) > 0 && (
             <p className="modern-pay-amount">₹{Number(amount).toLocaleString('en-IN')}</p>
           )}
           <p className="modern-pay-upi">
-            UPI: <strong>{paymentDetails.upiId}</strong>
+            <strong>{paymentDetails.payeeName}</strong>
           </p>
           <p className="modern-pay-note">
-            {paymentDetails.bankName} · {paymentDetails.accountNumber} · {paymentDetails.ifsc}
+            TID: {paymentDetails.terminalId}
           </p>
         </aside>
       </div>

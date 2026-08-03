@@ -435,6 +435,13 @@
   margin-bottom: 0.85rem;
 }
 
+.modern-pay-qr img {
+  display: block;
+  width: 168px;
+  height: auto;
+  border-radius: 6px;
+}
+
 .modern-pay-amount {
   margin: 0 0 0.5rem;
   font-size: 1.35rem;

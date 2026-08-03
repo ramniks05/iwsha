@@ -1,17 +1,14 @@
-import { QRCodeSVG } from 'qrcode.react'
-import { buildUpiLink, paymentDetails } from '../data/paymentConfig'
+import { paymentDetails, paymentQrImage } from '../data/paymentConfig'
 import { Link } from 'react-router-dom'
 
 function FooterDonateQr() {
-  const upiLink = buildUpiLink()
-
   return (
     <div className="footer-donate">
       <h4>Donate via UPI</h4>
       <div className="footer-qr-wrap">
-        <QRCodeSVG value={upiLink} size={110} level="M" includeMargin />
+        <img src={paymentQrImage} alt="Scan to pay via UPI" width={110} height={110} />
       </div>
-      <p className="footer-upi-id">{paymentDetails.upiId}</p>
+      <p className="footer-pay-id">TID: {paymentDetails.terminalId}</p>
       <Link to="/scholarships/donate" className="footer-donate-link">
         Donate Now →
       </Link>
