@@ -101,7 +101,7 @@ function DonationForm() {
           <FormIcon name="donate" />
         </div>
         <div>
-          <h2 id="donation-form-title">Make a Donation</h2>
+          <h2 id="donation-form-title">Registration Form</h2>
           <p>
             Your donation helps underserved yet ambitious students pursue advanced education
             and professional opportunities. Pay via UPI and submit your details below.
@@ -114,7 +114,7 @@ function DonationForm() {
           <div className="modern-form-section">
             <h3 className="modern-form-section-title">
               <FormIcon name="user" />
-              Donor Details
+              Candidate Details
             </h3>
             <FormField
               label="Full Name"
@@ -172,7 +172,7 @@ function DonationForm() {
           <div className="modern-form-section">
             <h3 className="modern-form-section-title">
               <FormIcon name="rupee" />
-              Donation Amount
+              Registration Fees
             </h3>
             <FormField
               label="Amount (INR)"

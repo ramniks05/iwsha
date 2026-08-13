@@ -220,11 +220,11 @@ export function validateDonationForm({ name, email, phoneCountry, phoneNational,
 
   const amountRaw = String(amount ?? '').trim()
   if (!amountRaw) {
-    errors.amount = 'Donation amount is required'
+    errors.amount = 'Registration fee is required'
   } else {
     const num = Number(amountRaw)
     if (!Number.isFinite(num) || num <= 0) {
-      errors.amount = 'Enter a valid donation amount greater than zero'
+      errors.amount = 'Enter a valid registration fee greater than zero'
     } else if (!Number.isInteger(num)) {
       errors.amount = 'Amount must be a whole number (INR)'
     } else if (num > 99999999) {
