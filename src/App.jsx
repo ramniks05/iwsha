@@ -136,7 +136,7 @@ function PublicLayout({ menuOpen, setMenuOpen, closeMenu }) {
                 WhatsApp
               </a>
               <NavLink to="/scholarships/donate" className="btn-donate-header" onClick={closeMenu}>
-                Donate
+                Registration
               </NavLink>
             </div>
           </div>
@@ -177,7 +177,7 @@ function PublicLayout({ menuOpen, setMenuOpen, closeMenu }) {
             <NavLink to="/programs">Programs</NavLink>
             <NavLink to="/scholarships">Scholarships</NavLink>
             <button type="button" className="footer-faq-btn" onClick={openFaq}>FAQ</button>
-            <NavLink to="/scholarships/donate">Donate</NavLink>
+            <NavLink to="/scholarships/donate">Registration</NavLink>
             <NavLink to="/contact">Contact Us</NavLink>
           </div>
 

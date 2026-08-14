@@ -86,7 +86,7 @@ function HomePage() {
           <p>Apply for a scholarship or donate to support underserved yet ambitious students.</p>
           <div className="hero-btns">
             <Link to="/scholarships/apply" className="btn btn-primary">Apply Now</Link>
-            <Link to="/scholarships/donate" className="btn btn-accent">Donate</Link>
+            <Link to="/scholarships/donate" className="btn btn-accent">Registration</Link>
           </div>
         </div>
       </section>

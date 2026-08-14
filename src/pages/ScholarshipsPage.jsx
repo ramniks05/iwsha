@@ -40,7 +40,7 @@ function ScholarshipsPage() {
             Support underserved students with a secure UPI donation. Every contribution
             helps open doors to education.
           </p>
-          <span className="scholarships-hub-card-link">Donate Now →</span>
+          <span className="scholarships-hub-card-link">Registration →</span>
         </Link>
 
         <button

@@ -260,7 +260,7 @@ function DonationForm() {
           <div className="modern-form-actions">
             <button type="submit" className="modern-form-btn modern-form-btn--orange" disabled={submitting}>
               <FormIcon name="donate" />
-              {submitting ? 'Submitting…' : 'Submit Donation'}
+              {submitting ? 'Submitting…' : 'Submit Form'}
             </button>
           </div>
 

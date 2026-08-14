@@ -63,7 +63,7 @@ function HeroSection() {
               Apply for Scholarship
             </Link>
             <Link to="/scholarships/donate" className="btn btn-premium btn-premium--secondary">
-              Donate Now
+              Registration
             </Link>
           </div>
 

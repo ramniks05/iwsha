@@ -10,7 +10,7 @@ function FooterDonateQr() {
       </div>
       <p className="footer-pay-id">TID: {paymentDetails.terminalId}</p>
       <Link to="/scholarships/donate" className="footer-donate-link">
-        Donate Now →
+        Registration →
       </Link>
     </div>
   )
