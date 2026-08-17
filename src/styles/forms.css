@@ -252,33 +252,11 @@
   cursor: pointer;
 }
 
-.modern-amount-chips {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.modern-amount-chips button {
-  border: 1.5px solid #e2e8f0;
-  background: #fff;
-  border-radius: 999px;
-  padding: 0.4rem 0.9rem;
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-  color: #64748b;
-  transition: all 0.2s;
-}
-
-.modern-amount-chips button:hover {
-  border-color: rgba(245, 130, 32, 0.35);
-  color: var(--orange, #f58220);
-}
-
-.modern-amount-chips button.active {
-  border-color: var(--orange, #f58220);
-  background: #fff8f2;
-  color: #e06a10;
+.modern-field-control input:disabled {
+  background: #f1f5f9;
+  color: #475569;
+  cursor: not-allowed;
+  opacity: 1;
 }
 
 .modern-form-check {
@@ -440,13 +418,6 @@
   width: 168px;
   height: auto;
   border-radius: 6px;
-}
-
-.modern-registration-fee {
-  margin: 0;
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: var(--orange, #f59e0b);
 }
 
 .modern-pay-amount {

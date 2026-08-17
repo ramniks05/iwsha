@@ -168,8 +168,17 @@ function DonationForm() {
               <FormIcon name="rupee" />
               Registration Fees
             </h3>
-            <p className="modern-registration-fee">
-              ₹{registrationFee.toLocaleString('en-IN')}
+            <FormField
+              label="Registration Fee (INR)"
+              name="registrationFee"
+              icon="rupee"
+              type="text"
+              value={registrationFee.toLocaleString('en-IN')}
+              readOnly
+              disabled
+            />
+            <p className="modern-field-hint">
+              Registration fee is fixed at ₹{registrationFee.toLocaleString('en-IN')} and cannot be changed.
             </p>
           </div>
 

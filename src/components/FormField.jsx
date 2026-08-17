@@ -16,6 +16,8 @@ function FormField({
   max,
   inputMode,
   autoComplete,
+  readOnly = false,
+  disabled = false,
 }) {
   const controlClass = [
     'modern-field-control',
@@ -50,6 +52,8 @@ function FormField({
             max={max}
             inputMode={inputMode}
             autoComplete={autoComplete}
+            readOnly={readOnly}
+            disabled={disabled}
             aria-invalid={error ? 'true' : 'false'}
             aria-describedby={error ? `${name}-error` : undefined}
           />
