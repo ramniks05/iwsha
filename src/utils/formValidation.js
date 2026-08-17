@@ -202,7 +202,7 @@ export function validateScholarshipForm(fields, formData, phoneValues, consentCh
   return errors
 }
 
-export function validateDonationForm({ name, email, phoneCountry, phoneNational, amount, transactionId, message }) {
+export function validateDonationForm({ name, email, phoneCountry, phoneNational, transactionId, message }) {
   const errors = {}
 
   const nameError = validateTextField(
@@ -217,20 +217,6 @@ export function validateDonationForm({ name, email, phoneCountry, phoneNational,
 
   const phoneError = validatePhoneField(phoneCountry, phoneNational, true)
   if (phoneError) errors.phone = phoneError
-
-  const amountRaw = String(amount ?? '').trim()
-  if (!amountRaw) {
-    errors.amount = 'Registration fee is required'
-  } else {
-    const num = Number(amountRaw)
-    if (!Number.isFinite(num) || num <= 0) {
-      errors.amount = 'Enter a valid registration fee greater than zero'
-    } else if (!Number.isInteger(num)) {
-      errors.amount = 'Amount must be a whole number (INR)'
-    } else if (num > 99999999) {
-      errors.amount = 'Amount exceeds the maximum allowed limit'
-    }
-  }
 
   const txnRaw = String(transactionId ?? '').trim()
   if (!txnRaw) {

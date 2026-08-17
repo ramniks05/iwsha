@@ -3,4 +3,6 @@ export const paymentDetails = {
   terminalId: '82318518',
 }
 
+export const registrationFee = 500
+
 export const paymentQrImage = '/qrcode.jpeg'

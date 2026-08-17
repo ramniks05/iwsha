@@ -3,18 +3,15 @@ import FormField from './FormField'
 import FormIcon from './FormIcon'
 import PhoneField from './PhoneField'
 import { DEFAULT_PHONE_COUNTRY } from '../data/countryPhoneOptions'
-import { paymentDetails, paymentQrImage } from '../data/paymentConfig'
+import { paymentDetails, paymentQrImage, registrationFee } from '../data/paymentConfig'
 import { validateDonationForm, formatPhoneE164 } from '../utils/formValidation'
 import { sendMessage } from '../lib/api'
 import '../styles/forms.css'
-
-const quickAmounts = [500, 1000, 5000]
 
 function DonationForm() {
   const [donationSuccess, setDonationSuccess] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [errors, setErrors] = useState({})
-  const [amount, setAmount] = useState('1000')
   const [phoneCountry, setPhoneCountry] = useState(DEFAULT_PHONE_COUNTRY)
   const [phoneNational, setPhoneNational] = useState('')
   const [formValues, setFormValues] = useState({ name: '', email: '', transactionId: '', message: '' })
@@ -34,7 +31,6 @@ function DonationForm() {
       email: values.email,
       phoneCountry,
       phoneNational,
-      amount,
       transactionId: values.transactionId,
       message: values.message,
     })
@@ -54,7 +50,6 @@ function DonationForm() {
       email: formValues.email,
       phoneCountry,
       phoneNational,
-      amount,
       transactionId: formValues.transactionId,
       message: formValues.message,
     })
@@ -76,7 +71,7 @@ function DonationForm() {
         name: formValues.name.trim(),
         email: formValues.email.trim(),
         phone: formatPhoneE164(phoneCountry, phoneNational),
-        amount: String(amount).trim(),
+        amount: String(registrationFee),
         transactionId: formValues.transactionId.trim(),
         message: formValues.message.trim(),
       })
@@ -85,7 +80,6 @@ function DonationForm() {
       setFormValues({ name: '', email: '', transactionId: '', message: '' })
       setPhoneCountry(DEFAULT_PHONE_COUNTRY)
       setPhoneNational('')
-      setAmount('1000')
     } catch (err) {
       setErrors({ _form: err.message || 'Submission failed. Please try again.' })
       setDonationSuccess(false)
@@ -174,39 +168,9 @@ function DonationForm() {
               <FormIcon name="rupee" />
               Registration Fees
             </h3>
-            <FormField
-              label="Amount (INR)"
-              name="amount"
-              icon="rupee"
-              type="number"
-              placeholder="1000"
-              required
-              min={1}
-              inputMode="numeric"
-              value={amount}
-              error={errors.amount}
-              onChange={(event) => {
-                setAmount(event.target.value)
-                clearError('amount')
-              }}
-              onBlur={() => validateField('amount')}
-            />
-
-            <div className="modern-amount-chips">
-              {quickAmounts.map((value) => (
-                <button
-                  key={value}
-                  type="button"
-                  className={Number(amount) === value ? 'active' : ''}
-                  onClick={() => {
-                    setAmount(String(value))
-                    clearError('amount')
-                  }}
-                >
-                  ₹{value.toLocaleString('en-IN')}
-                </button>
-              ))}
-            </div>
+            <p className="modern-registration-fee">
+              ₹{registrationFee.toLocaleString('en-IN')}
+            </p>
           </div>
 
           <div className="modern-form-section">
@@ -286,9 +250,7 @@ function DonationForm() {
           <div className="modern-pay-qr">
             <img src={paymentQrImage} alt="Scan to pay via UPI" width={168} height={168} />
           </div>
-          {Number(amount) > 0 && (
-            <p className="modern-pay-amount">₹{Number(amount).toLocaleString('en-IN')}</p>
-          )}
+          <p className="modern-pay-amount">₹{registrationFee.toLocaleString('en-IN')}</p>
           <p className="modern-pay-upi">
             <strong>{paymentDetails.payeeName}</strong>
           </p>

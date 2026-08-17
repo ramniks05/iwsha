@@ -442,6 +442,13 @@
   border-radius: 6px;
 }
 
+.modern-registration-fee {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--orange, #f59e0b);
+}
+
 .modern-pay-amount {
   margin: 0 0 0.5rem;
   font-size: 1.35rem;
