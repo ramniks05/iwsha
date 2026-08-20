@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import FormField from './FormField'
 import FormIcon from './FormIcon'
 import PhoneField from './PhoneField'
@@ -8,7 +8,32 @@ import { validateDonationForm, formatPhoneE164 } from '../utils/formValidation'
 import { sendMessage } from '../lib/api'
 import '../styles/forms.css'
 
+function RegistrationPaymentCard({ className = '' }) {
+  return (
+    <aside className={['modern-pay-card', className].filter(Boolean).join(' ')}>
+      <div className="modern-pay-card-header">
+        <FormIcon name="qr" />
+        <h3>Scan & Pay</h3>
+      </div>
+      <div className="modern-pay-qr">
+        <img
+          src={paymentQrImage}
+          alt="UPI QR code for registration fee"
+          width={168}
+          height={168}
+        />
+      </div>
+      <p className="modern-pay-amount">₹{registrationFee.toLocaleString('en-IN')}</p>
+      <p className="modern-pay-note">Any UPI app · Pay exactly ₹500</p>
+      <p className="modern-pay-note modern-pay-note--tid">
+        TID: {paymentDetails.terminalId}
+      </p>
+    </aside>
+  )
+}
+
 function DonationForm() {
+  const successRef = useRef(null)
   const [donationSuccess, setDonationSuccess] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [errors, setErrors] = useState({})
@@ -80,6 +105,9 @@ function DonationForm() {
       setFormValues({ name: '', email: '', transactionId: '', message: '' })
       setPhoneCountry(DEFAULT_PHONE_COUNTRY)
       setPhoneNational('')
+      requestAnimationFrame(() => {
+        successRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      })
     } catch (err) {
       setErrors({ _form: err.message || 'Submission failed. Please try again.' })
       setDonationSuccess(false)
@@ -89,32 +117,20 @@ function DonationForm() {
   }
 
   return (
-    <section className="modern-form-shell" aria-labelledby="registration-form-title">
-      <header className="modern-form-header">
-        <div className="modern-form-header-icon modern-form-header-icon--donate">
-          <FormIcon name="donate" />
-        </div>
-        <div>
-          <h2 id="registration-form-title">Registration Form</h2>
-          <p>
-            Please fill in your personal details, pay the registration fee of ₹{registrationFee.toLocaleString('en-IN')} via UPI,
-            and enter your transaction ID to complete your registration with IWSHA.
-          </p>
-        </div>
-      </header>
+    <section className="modern-form-shell modern-form-shell--landing" aria-label="Registration form">
+      <RegistrationPaymentCard className="modern-pay-card--mobile" />
 
-      <div className="modern-form-layout">
+      <div className="modern-form-layout modern-form-layout--registration">
         <form onSubmit={handleDonationSubmit} className="modern-form" noValidate>
           <div className="modern-form-section">
             <h3 className="modern-form-section-title">
-              <FormIcon name="user" />
               Candidate Details
             </h3>
             <FormField
               label="Full Name"
               name="name"
               icon="user"
-              placeholder="Enter your full name as on official documents"
+              placeholder="Your full name"
               required
               value={formValues.name}
               autoComplete="name"
@@ -146,7 +162,7 @@ function DonationForm() {
             <PhoneField
               id="phone"
               name="phone"
-              label="Phone"
+              label="Mobile Number"
               required
               country={phoneCountry}
               national={phoneNational}
@@ -165,33 +181,23 @@ function DonationForm() {
 
           <div className="modern-form-section">
             <h3 className="modern-form-section-title">
-              <FormIcon name="rupee" />
-              Registration Fees
+              Registration Fee
             </h3>
-            <FormField
-              label="Registration Fee (INR)"
-              name="registrationFee"
-              icon="rupee"
-              type="text"
-              value={registrationFee.toLocaleString('en-IN')}
-              readOnly
-              disabled
-            />
-            <p className="modern-field-hint">
-              A one-time registration fee of ₹{registrationFee.toLocaleString('en-IN')} is required for all candidates. This amount is fixed.
-            </p>
+            <div className="registration-fee-badge" aria-label={`Registration fee ${registrationFee} rupees`}>
+              ₹{registrationFee.toLocaleString('en-IN')}
+            </div>
+            <p className="modern-field-hint">One-time fee · pay using the QR code</p>
           </div>
 
           <div className="modern-form-section">
             <h3 className="modern-form-section-title">
-              <FormIcon name="check" />
               Payment Confirmation
             </h3>
             <FormField
               label="Transaction ID"
               name="transactionId"
               icon="check"
-              placeholder="UPI / bank transaction reference number"
+              placeholder="UPI transaction ID"
               required
               value={formValues.transactionId}
               error={errors.transactionId}
@@ -202,13 +208,11 @@ function DonationForm() {
               }}
               onBlur={() => validateField('transactionId')}
             />
-            <p className="modern-field-hint" style={{ marginTop: '-0.5rem', fontSize: '0.82rem', color: 'var(--muted)' }}>
-              Scan the QR code on the right to pay via UPI, then enter the transaction ID from your payment app or bank confirmation.
-            </p>
+            <p className="modern-field-hint">From your UPI app after payment</p>
           </div>
 
           <FormField
-            label="Additional Information (optional)"
+            label="Notes (optional)"
             name="message"
             icon="message"
             error={errors.message}
@@ -216,8 +220,8 @@ function DonationForm() {
             <textarea
               id="message"
               name="message"
-              rows="3"
-              placeholder="Course preference, questions, or anything else you would like us to know"
+              rows="2"
+              placeholder="Course or query (optional)"
               value={formValues.message}
               aria-invalid={errors.message ? 'true' : 'false'}
               aria-describedby={errors.message ? 'message-error' : undefined}
@@ -230,11 +234,14 @@ function DonationForm() {
             />
           </FormField>
 
-          <div className="modern-form-actions">
+          <div className="modern-form-actions modern-form-actions--landing">
             <button type="submit" className="modern-form-btn modern-form-btn--orange" disabled={submitting}>
-              <FormIcon name="donate" />
+              <FormIcon name="check" />
               {submitting ? 'Submitting…' : 'Complete Registration'}
             </button>
+            <p className="modern-form-footnote">
+              Our counsellors will contact you within 1–2 working days.
+            </p>
           </div>
 
           {errors._form && (
@@ -242,31 +249,16 @@ function DonationForm() {
           )}
 
           {donationSuccess && (
-            <p className="modern-form-success" role="status">
+            <p ref={successRef} className="modern-form-success modern-form-success--landing" role="status">
               <span className="modern-form-success-icon" aria-hidden="true">
                 <FormIcon name="check" />
               </span>
-              Thank you for registering with IWSHA. We have received your details and payment reference. Our team will contact you soon with the next steps.
+              Thank you! Registration received. Our team will contact you within 1–2 working days.
             </p>
           )}
         </form>
 
-        <aside className="modern-pay-card">
-          <div className="modern-pay-card-header">
-            <FormIcon name="qr" />
-            <h3>Pay Registration Fee</h3>
-          </div>
-          <div className="modern-pay-qr">
-            <img src={paymentQrImage} alt="UPI QR code to pay IWSHA registration fee" width={168} height={168} />
-          </div>
-          <p className="modern-pay-amount">₹{registrationFee.toLocaleString('en-IN')}</p>
-          <p className="modern-pay-upi">
-            <strong>{paymentDetails.payeeName}</strong>
-          </p>
-          <p className="modern-pay-note">
-            Scan with any UPI app · TID: {paymentDetails.terminalId}
-          </p>
-        </aside>
+        <RegistrationPaymentCard className="modern-pay-card--desktop" />
       </div>
     </section>
   )

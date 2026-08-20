@@ -440,6 +440,174 @@
   line-height: 1.55;
 }
 
+.modern-pay-note--tid {
+  margin-top: 0.35rem;
+  opacity: 0.55;
+}
+
+.modern-field-hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.82rem;
+  color: var(--muted, #64748b);
+  line-height: 1.55;
+}
+
+/* Registration landing page */
+.form-page--landing .page-hero--landing {
+  margin-bottom: 1.25rem;
+}
+
+.registration-hero-badge {
+  display: inline-block;
+  margin-bottom: 0.65rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(255, 193, 7, 0.18);
+  border: 1px solid rgba(255, 193, 7, 0.35);
+  color: #ffe082;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.registration-hero-lead {
+  max-width: 34ch;
+  margin: 0.35rem auto 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  opacity: 0.92;
+}
+
+.registration-trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.25rem;
+  margin: 0.85rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8rem;
+  opacity: 0.92;
+}
+
+.registration-trust a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.registration-trust a:hover {
+  text-decoration: underline;
+}
+
+.registration-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+  max-width: 1080px;
+  margin: 0 auto 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.registration-step {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.75rem 0.65rem;
+  background: var(--card, #fff);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 12px;
+  box-shadow: var(--shadow, 0 4px 24px rgba(5, 44, 101, 0.06));
+  text-align: center;
+}
+
+.registration-step-num {
+  display: inline-grid;
+  place-items: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  margin: 0 auto 0.15rem;
+  border-radius: 50%;
+  background: rgba(13, 110, 253, 0.1);
+  color: var(--blue, #0d6efd);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.registration-step strong {
+  font-size: 0.88rem;
+  color: var(--navy, #052c65);
+}
+
+.registration-step-text {
+  font-size: 0.76rem;
+  color: var(--muted, #64748b);
+  line-height: 1.4;
+}
+
+.modern-form-shell--landing {
+  padding-top: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.modern-form-shell--landing .modern-form-section {
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.85);
+}
+
+.modern-form-shell--landing .modern-form-section:last-of-type {
+  border-bottom: none;
+}
+
+.modern-form-shell--landing .modern-field-hint {
+  margin-top: 0.65rem;
+}
+
+.registration-fee-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.85rem 1.1rem;
+  border-radius: 12px;
+  background: #fff8f2;
+  border: 1px solid rgba(245, 130, 32, 0.22);
+  color: #c2410c;
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.modern-form-actions--landing {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.65rem;
+}
+
+.modern-form-actions--landing .modern-form-btn {
+  width: 100%;
+  padding: 1rem 1.35rem;
+  font-size: 1rem;
+}
+
+.modern-form-footnote {
+  margin: 0;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--muted, #64748b);
+  line-height: 1.45;
+}
+
+.modern-form-success--landing {
+  border: 1px solid rgba(0, 166, 81, 0.25);
+  background: #f0fdf4;
+}
+
+.modern-pay-card--mobile {
+  display: none;
+  margin-bottom: 1.25rem;
+}
+
+.modern-pay-card--desktop {
+  display: block;
+}
+
 /* Scholarships hub */
 .scholarships-hub-grid {
   display: grid;
@@ -565,11 +733,24 @@ button.scholarships-hub-card {
   .modern-form-layout,
   .modern-form-row,
   .modern-phone-row,
-  .scholarships-hub-grid {
+  .scholarships-hub-grid,
+  .registration-steps {
     grid-template-columns: 1fr;
   }
 
   .modern-pay-card {
     position: static;
+  }
+
+  .modern-pay-card--mobile {
+    display: block;
+  }
+
+  .modern-pay-card--desktop {
+    display: none;
+  }
+
+  .form-page--landing .page-hero-content h1 {
+    font-size: 1.55rem;
   }
 }
