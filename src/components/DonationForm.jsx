@@ -89,16 +89,16 @@ function DonationForm() {
   }
 
   return (
-    <section className="modern-form-shell" aria-labelledby="donation-form-title">
+    <section className="modern-form-shell" aria-labelledby="registration-form-title">
       <header className="modern-form-header">
         <div className="modern-form-header-icon modern-form-header-icon--donate">
           <FormIcon name="donate" />
         </div>
         <div>
-          <h2 id="donation-form-title">Registration Form</h2>
+          <h2 id="registration-form-title">Registration Form</h2>
           <p>
-            Your donation helps underserved yet ambitious students pursue advanced education
-            and professional opportunities. Pay via UPI and submit your details below.
+            Please fill in your personal details, pay the registration fee of ₹{registrationFee.toLocaleString('en-IN')} via UPI,
+            and enter your transaction ID to complete your registration with IWSHA.
           </p>
         </div>
       </header>
@@ -114,7 +114,7 @@ function DonationForm() {
               label="Full Name"
               name="name"
               icon="user"
-              placeholder="Your name"
+              placeholder="Enter your full name as on official documents"
               required
               value={formValues.name}
               autoComplete="name"
@@ -178,7 +178,7 @@ function DonationForm() {
               disabled
             />
             <p className="modern-field-hint">
-              Registration fee is fixed at ₹{registrationFee.toLocaleString('en-IN')} and cannot be changed.
+              A one-time registration fee of ₹{registrationFee.toLocaleString('en-IN')} is required for all candidates. This amount is fixed.
             </p>
           </div>
 
@@ -203,12 +203,12 @@ function DonationForm() {
               onBlur={() => validateField('transactionId')}
             />
             <p className="modern-field-hint" style={{ marginTop: '-0.5rem', fontSize: '0.82rem', color: 'var(--muted)' }}>
-              Complete payment using the QR code, then enter the transaction ID from your UPI app or bank receipt.
+              Scan the QR code on the right to pay via UPI, then enter the transaction ID from your payment app or bank confirmation.
             </p>
           </div>
 
           <FormField
-            label="Message (optional)"
+            label="Additional Information (optional)"
             name="message"
             icon="message"
             error={errors.message}
@@ -217,7 +217,7 @@ function DonationForm() {
               id="message"
               name="message"
               rows="3"
-              placeholder="Your message of support"
+              placeholder="Course preference, questions, or anything else you would like us to know"
               value={formValues.message}
               aria-invalid={errors.message ? 'true' : 'false'}
               aria-describedby={errors.message ? 'message-error' : undefined}
@@ -233,7 +233,7 @@ function DonationForm() {
           <div className="modern-form-actions">
             <button type="submit" className="modern-form-btn modern-form-btn--orange" disabled={submitting}>
               <FormIcon name="donate" />
-              {submitting ? 'Submitting…' : 'Submit Form'}
+              {submitting ? 'Submitting…' : 'Complete Registration'}
             </button>
           </div>
 
@@ -246,7 +246,7 @@ function DonationForm() {
               <span className="modern-form-success-icon" aria-hidden="true">
                 <FormIcon name="check" />
               </span>
-              Thank you! Your donation details and transaction ID have been submitted successfully.
+              Thank you for registering with IWSHA. We have received your details and payment reference. Our team will contact you soon with the next steps.
             </p>
           )}
         </form>
@@ -254,17 +254,17 @@ function DonationForm() {
         <aside className="modern-pay-card">
           <div className="modern-pay-card-header">
             <FormIcon name="qr" />
-            <h3>Scan to Pay</h3>
+            <h3>Pay Registration Fee</h3>
           </div>
           <div className="modern-pay-qr">
-            <img src={paymentQrImage} alt="Scan to pay via UPI" width={168} height={168} />
+            <img src={paymentQrImage} alt="UPI QR code to pay IWSHA registration fee" width={168} height={168} />
           </div>
           <p className="modern-pay-amount">₹{registrationFee.toLocaleString('en-IN')}</p>
           <p className="modern-pay-upi">
             <strong>{paymentDetails.payeeName}</strong>
           </p>
           <p className="modern-pay-note">
-            TID: {paymentDetails.terminalId}
+            Scan with any UPI app · TID: {paymentDetails.terminalId}
           </p>
         </aside>
       </div>
