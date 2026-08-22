@@ -229,11 +229,11 @@ export function validateDonationForm({ name, email, phoneCountry, phoneNational,
     errors.transactionId = 'Transaction ID can only contain letters, numbers, -, _ and /'
   }
 
-  if (message?.trim()) {
+  if (message != null && String(message).trim()) {
     const messageError = validateTextField(
       message,
-      { required: false, label: 'Message' },
-      { maxLength: 500, label: 'Message' },
+      { required: false, label: 'Notes' },
+      { maxLength: 500, label: 'Notes' },
     )
     if (messageError) errors.message = messageError
   }

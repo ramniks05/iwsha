@@ -82,13 +82,17 @@ function DonationForm() {
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors)
       setDonationSuccess(false)
-      const firstErrorId = Object.keys(nextErrors)[0]
-      document.getElementById(firstErrorId)?.focus?.()
+      const firstErrorField = Object.keys(nextErrors).find((key) => key !== '_form')
+      if (firstErrorField) {
+        document.getElementById(firstErrorField)?.focus?.()
+      }
       return
     }
 
     setSubmitting(true)
     setErrors({})
+
+    const trimmedMessage = formValues.message.trim()
 
     try {
       await sendMessage({
@@ -98,10 +102,9 @@ function DonationForm() {
         phone: formatPhoneE164(phoneCountry, phoneNational),
         amount: String(registrationFee),
         transactionId: formValues.transactionId.trim(),
-        message: formValues.message.trim(),
+        message: trimmedMessage || null,
       })
       setDonationSuccess(true)
-      event.currentTarget.reset()
       setFormValues({ name: '', email: '', transactionId: '', message: '' })
       setPhoneCountry(DEFAULT_PHONE_COUNTRY)
       setPhoneNational('')
